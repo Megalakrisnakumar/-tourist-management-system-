@@ -1,143 +1,79 @@
 import React from 'react';
 import useFetch from '../../hooks/useFetch';
 import { BASE_URL } from '../../utils/config';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
+import { green, red } from '@mui/material/colors';
+import axios from 'axios';
 
 const BookingsAccomondationTable = () => {
-  // Sample booking data
-
-  const { data:book } = useFetch(`${BASE_URL}/accomondation/booking/getAll`);
+  const { data: book } = useFetch(`${BASE_URL}/accomondation/booking/getAll`);
   console.log(book);
 
-  // booking
-  const bookings = [
-    {
-      bookingId: 'B001',
-      userId: 'U001',
-      accommodationId: 'A001',
-      checkInDate: '2025-01-10',
-      checkOutDate: '2025-01-15',
-      totalPrice: 5000,
-      status: 'confirmed',
-    },
-    {
-      bookingId: 'B002',
-      userId: 'U002',
-      accommodationId: 'A002',
-      checkInDate: '2025-02-01',
-      checkOutDate: '2025-02-05',
-      totalPrice: 3000,
-      status: 'cancelled',
-    },
-    {
-      bookingId: 'B003',
-      userId: 'U003',
-      accommodationId: 'A003',
-      checkInDate: '2025-03-10',
-      checkOutDate: '2025-03-15',
-      totalPrice: 4500,
-      status: 'confirmed',
-    },
-  ];
+  const handleCancel = async (Booking) => {
+    console.log(`Booking ${Booking._id} cancelled.`); // Add cancel logic here
 
-  // container 
-  const container= {
-    padding: "30px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "8px",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-    maxWidth: "1200px",
-    margin: "auto",
-    marginTop: "20px"
-}
+    try {
 
-  // Inline styles
-  const tableStyle = {
-    width: '90%',
-    margin: '30px auto',
-    borderCollapse: 'collapse',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-    fontFamily: 'Arial, sans-serif',
+    const {data} = await axios.put(`http://localhost:8000/api/v1/accomondation/booking/${Booking.userId}`, {id: Booking._id})
+    
+    console.log(data);
+    
+
+      alert(`Booking ${Booking._id} has been cancelled.`);
+
+    } catch (error) {
+
+    }
+
+
   };
-
-  const thStyle = {
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    textAlign: 'center',
-    padding: '15px',
-    border: '1px solid #ddd',
-    fontWeight: 'bold',
-  };
-
-  const tdStyle = {
-    padding: '12px',
-    border: '1px solid #ddd',
-    textAlign: 'center',
-    fontSize: '14px',
-  };
-
-  const rowStyle = {
-    backgroundColor: '#f9f9f9',
-  };
-
-  const alternateRowStyle = {
-    backgroundColor: '#e9ecef',
-  };
-
-  const hoverStyle = {
-    transition: 'background-color 0.3s ease',
-  };
-
- const  header= {
-    textAlign: "center",
-    color: "#333",
-    fontFamily: "'Roboto', sans-serif",
-    fontSize: "32px",
-    marginBottom: "20px",
-}
-
-  const statusStyle = (status) => ({
-    color: status === 'confirmed' ? '#28a745' : '#dc3545',
-    fontWeight: 'bold',
-  });
 
   return (
-     <div style={container}>
-        <h1 style={header}>Accoomondation Booking List </h1>
-          <table style={tableStyle}>
-      <thead>
-        <tr>
-          <th style={thStyle}>Booking ID</th>
-          <th style={thStyle}>User ID</th>
-          <th style={thStyle}>Accommodation ID</th>
-          <th style={thStyle}>Check-In Date</th>
-          <th style={thStyle}>Check-Out Date</th>
-          <th style={thStyle}>Total Price</th>
-          <th style={thStyle}>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {book?.map((booking, index) => (
-          <tr
-            key={booking.bookingId}
-            style={{
-              ...hoverStyle,
-              ...(index % 2 === 0 ? rowStyle : alternateRowStyle),
-            }}
-          >
-            <td style={tdStyle}>{booking.bookingId}</td>
-            <td style={tdStyle}>{booking.userId}</td>
-            <td style={tdStyle}>{booking.accommodationId}</td>
-            <td style={tdStyle}>{booking.checkInDate}</td>
-            <td style={tdStyle}>{booking.checkOutDate}</td>
-            <td style={tdStyle}>${booking.totalPrice}</td>
-            <td style={{ ...tdStyle, ...statusStyle(booking.status) }}>
-              {booking.status}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-     </div>
+    <Paper sx={{ p: 4, maxWidth: 1200, margin: '20px auto', boxShadow: 3 }}>
+      <Typography variant="h4" align="center" gutterBottom sx={{ color: '#007BFF', fontWeight: 'bold' }}>
+        Accommodation Booking List
+      </Typography>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead sx={{ backgroundColor: '#007BFF' }}>
+            <TableRow>
+              {['Booking ID', 'User ID', 'Accommodation ID', 'Check-In Date', 'Check-Out Date', 'Total Price', 'Status', 'Action'].map((head) => (
+                <TableCell key={head} sx={{ color: '#fff', fontWeight: 'bold', textAlign: 'center' }}>{head}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {book?.map((booking, index) => (
+              <TableRow key={booking.bookingId} sx={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#e9ecef' }}>
+                <TableCell align="center">{booking.bookingId}</TableCell>
+                <TableCell align="center">{booking.userId}</TableCell>
+                <TableCell align="center">{booking.accommodationId}</TableCell>
+                <TableCell align="center">{booking.checkInDate}</TableCell>
+                <TableCell align="center">{booking.checkOutDate}</TableCell>
+                <TableCell align="center">${booking.totalPrice}</TableCell>
+                <TableCell align="center" sx={{ color: booking.status === 'confirmed' ? green[500] : red[500], fontWeight: 'bold' }}>
+                  {booking.status}
+                </TableCell>
+                <TableCell align="center">
+                  {booking.status === 'confirmed' && (
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => handleCancel(booking)}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 };
 

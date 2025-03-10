@@ -10,6 +10,7 @@ import Newsletter from '../../shared/Newsletter'
 import useFetch from '../../hooks/useFetch.js'
 import { BASE_URL } from '../../utils/config.js'
 import { AuthContext } from '../../context/AuthContext.js'
+import MapComponent from '../map/map.jsx'
 
 
 const TourDetails = () => {
@@ -156,8 +157,18 @@ const TourDetails = () => {
                       }
                     </ListGroup>
                   </div>
+
+
+                  <div>
+                        <MapComponent/>
+                    </div>
+
                   {/*================tour reviews section end==================== */}
                 </div>
+
+                   
+
+
               </Col>
               <Col lg='4'>
                 <Booking tour={tour} avgRating={avgRating} />

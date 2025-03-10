@@ -10,6 +10,7 @@ import reviewRoute from './routes/review.js'
 import bookingRoute from './routes/bookings.js'
 
 import accoRoute from "./routes/accomondations.js"
+import { GetAllDashbard } from './controllers/dashboard.js'
 
 dotenv.config();
 
@@ -52,10 +53,11 @@ app.use("/api/v1/tours" , tourRoute);
 app.use("/api/v1/users" , userRoute);
 app.use("/api/v1/review" , reviewRoute);
 app.use("/api/v1/booking" , bookingRoute);
-
 app.use("/api/v1/accomondation" , accoRoute);
+app.get("/dashboard",GetAllDashbard);
 
 
+//http://localhost:8000/api/v1/accomondationbooking/booking/:id
 
 
 

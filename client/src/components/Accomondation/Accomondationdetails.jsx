@@ -60,7 +60,7 @@ const AccBookingPage = () => {
       {/* Image Section */}
       <div style={{  padding: '1px' }}>
         <img
-          src="path_to_image.jpg" // Replace with your accommodation image path
+          src={"http://localhost:8000/uploads/"+state.images[0]} // Replace with your accommodation image path
           alt={state.name}
           style={{ width: '70%', borderRadius: '10px', objectFit: 'cover', height: '400px' }}
         />

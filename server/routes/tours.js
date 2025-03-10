@@ -6,9 +6,10 @@ import { createTour, deleteTour, getAllTour, getFeaturedTour,
 const router= express.Router();
 
 import { verifyAdmin } from "../utils/verifyToken.js";
+import upload from "../Middleware/fileupload.js";
 
 //create new tour
-router.post("/" , verifyAdmin, createTour);
+router.post("/" ,upload.single("photo"), createTour);
 
 //update  tour
 router.put("/:id" , updateTour); //verifyAdmin

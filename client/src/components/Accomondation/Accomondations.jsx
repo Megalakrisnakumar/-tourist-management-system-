@@ -4,6 +4,8 @@ import { BASE_URL } from '../../utils/config';
 import { Link, useNavigate } from 'react-router-dom';
 
 const AccommodationCard = ({ accommodation }) => {
+  const location =accommodation.location ;
+  const googleMapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(location)}`;
 
     const navigate = useNavigate()
 
@@ -59,7 +61,7 @@ const AccommodationCard = ({ accommodation }) => {
   return (
     <div style={cardStyle}>
       <img
-        src={accommodation.image}
+        src={"http://localhost:8000/uploads/"+accommodation.images[0]}
         alt={accommodation.name}
         style={imageStyle}
       />
@@ -82,6 +84,24 @@ const AccommodationCard = ({ accommodation }) => {
             >
               Book Now
             </button>
+ <br />
+ <br />
+            <a
+        href={googleMapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          padding: '10px 20px',
+          backgroundColor: 'blue',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+        
+      >
+        Go to Map
+      </a>
            
       </div>
     </div>

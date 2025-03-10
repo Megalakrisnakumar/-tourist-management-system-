@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { BASE_URL } from '../../utils/config.js';
 
 
-const Register = () => {
+const AdminRegister = () => {
    
   const [credentials, setCredentials] = useState({
     userName: undefined,
@@ -33,7 +33,7 @@ const Register = () => {
         headers:{
           'content-type' : 'application/json'
         },
-        body:JSON.stringify({...credentials,role:"user"})
+        body:JSON.stringify({...credentials,role:"admin"})
       })
 
       const result= await res.json()
@@ -91,5 +91,5 @@ const Register = () => {
   )
 }
 
-export default Register
+export default AdminRegister
 

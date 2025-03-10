@@ -7,6 +7,7 @@ import AccommodationTable from '../Accomondation/AccomondatinTable'
 import BookingsAccomondationTable from '../Accomondation/BookingsAccomondationTable'
 import AddAccommodation from '../Accomondation/AddAccomondation'
 import Accommodations from '../Accomondation/Accomondations'
+import AdminDashboard from './adminDashboard'
 
 export default function Dashboard() {
 
@@ -55,49 +56,7 @@ export default function Dashboard() {
       options === "dashboard" ? (
         <>
           
-          {/* <!-- Top Cards --> */}
-          <div class="row my-4">
-            <div class="col-md-3">
-              <div class="card p-3">
-                <h6>Total Booking</h6>
-                <p>0</p>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card p-3">
-                <h6>Total Tourist Places</h6>
-                <p>$642.39</p>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card p-3">
-                <h6>Sales</h6>
-                <p>$574.34 <span class="text-success">+23%</span></p>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card p-3">
-                <h6>Your Balance</h6>
-                <p>$1,000</p>
-              </div>
-            </div>
-          </div>
-
-          {/* <!-- Middle Cards --> */}
-          <div class="row my-4">
-            <div class="col-md-6">
-              <div class="card p-3">
-                <h6>Total Spent</h6>
-                <p>$37.5K <span class="text-success">+2.45%</span></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card p-3">
-                <h6>Weekly Revenue</h6>
-                <div class="chart bg-light"></div>
-              </div>
-            </div>
-          </div>
+         <AdminDashboard/>
         </>
       ):null
     }

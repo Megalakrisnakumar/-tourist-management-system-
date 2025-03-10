@@ -5,8 +5,12 @@ import './tour-card.css'
 import calculateAvgRating from '../utils/avgRating'
 
 const TourCard = ({ tour }) => {
-  const { _id, title, city, photo, price, featured, reviews } = tour;
+  const { _id, title, city, photo, price, featured, reviews,latitude ,longitude} = tour;
   const { totalRating, avgRating } = calculateAvgRating(reviews);
+
+  const generateGoogleMapsLink = (latitude, longitude) => {
+    return `https://www.google.com/maps?q=${latitude},${longitude}`;
+};
 
   return (
     <div className='tour__card'>
@@ -29,6 +33,9 @@ const TourCard = ({ tour }) => {
             <Link to={`/tours/${_id}`}>{title}</Link>
           </h5>
           <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
+            <a href={generateGoogleMapsLink(latitude,longitude)}>
+             <button  >view on map</button>
+            </a>
             <h5>₹{price} <span> /per person</span></h5>
             <button className="btn booking__btn">
               <Link to={`/tours/${_id}`}>Book Now</Link>
@@ -36,8 +43,6 @@ const TourCard = ({ tour }) => {
           </div>
         </CardBody>
       </Card>
-
-
     </div>
   )
 }

@@ -5,7 +5,31 @@ import Tour from "../models/Tour.js"
 //create a new tour
 export const createTour = async (req, res) => {
 
-    const newTour = new Tour(req.body);
+   let {title,city,address,distance,maxGroupSize,desc,price,latitude,longitude}=req.body
+
+   const photourl = req.file.path;
+
+   const fileName = photourl.split("uploads\\")[1];
+
+const fileURL = `http://localhost:8000/uploads/${fileName}`;
+
+console.log(fileURL);
+
+
+   
+
+    const newTour = new Tour({
+    title,
+    city,
+    address,
+    distance,
+    maxGroupSize,
+    desc,
+    photo:fileURL,
+    price,
+    latitude,
+    longitude 
+});
 
     try {
         const savedTour = await newTour.save();
