@@ -1,185 +1,143 @@
-import React, { useEffect, useRef, useState, useContext } from 'react'
-import '../../styles/tour-details.css'
-import { Container, Row, Col, Form, ListGroup } from 'reactstrap'
-import { useParams } from 'react-router-dom'
-
-import calculateAvgRating from '../../utils/avgRating'
-import avatar from '../../assets/images/avatar.jpg'
-import Booking from '../Booking/Booking'
-import Newsletter from '../../shared/Newsletter'
-import useFetch from '../../hooks/useFetch.js'
-import { BASE_URL } from '../../utils/config.js'
-import { AuthContext } from '../../context/AuthContext.js'
-import MapComponent from '../map/map.jsx'
-
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { Container, Grid, Typography, Card, CardContent, CardMedia, Button, TextField, List, ListItem, Avatar, Box, Rating } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import calculateAvgRating from '../../utils/avgRating';
+import avatar from '../../assets/images/avatar.jpg';
+import Booking from '../Booking/Booking';
+import Newsletter from '../../shared/Newsletter';
+import useFetch from '../../hooks/useFetch.js';
+import { BASE_URL } from '../../utils/config.js';
+import { AuthContext } from '../../context/AuthContext.js';
+import MapComponent from '../map/map.jsx';
+import { motion } from 'framer-motion';
 
 const TourDetails = () => {
 
   const { id } = useParams();
   const reviewMsgRef = useRef('');
   const [tourRating, setTourRating] = useState(null);
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const { data: tour, loading, error } = useFetch(`${BASE_URL}/tours/${id}`);
-
   const { photo, title, desc, price, address, reviews, city, distance, maxGroupSize } = tour;
 
   const { totalRating, avgRating } = calculateAvgRating(reviews);
-
-  const options = { day: "numeric", month: "long", year: "numeric" };
 
   const submitHandler = async e => {
     e.preventDefault();
     const reviewText = reviewMsgRef.current.value;
 
     try {
-      if (!user || user === undefined || user === null) {
+      if (!user) {
         alert('Please Sign In!');
+        return;
       }
 
       const reviewObj = {
-        username :user?.username,
+        username: user?.username,
         reviewText,
-        rating:tourRating,
-      }
+        rating: tourRating,
+      };
 
-      const res= await fetch(`${BASE_URL}/review/${id}`,{
-        method:'post',
-        headers:{
-          'content-type':'application/json',
-        },
-        credentials:'include',
-        body:JSON.stringify(reviewObj)
+      const res = await fetch(`${BASE_URL}/review/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(reviewObj)
       });
 
-      const result=await res.json()
-      if(!res.ok) {
-        return alert(result.message);
-      }
-      alert(result.message)
-  
-    } catch (err) {
-        alert(err.message)
-    }
+      const result = await res.json();
+      alert(result.message);
 
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [tour])
+  }, [tour]);
 
   return (
-    <>
-      <section>
-        <Container>
-          {
-            loading && <h4 className="text-center pt-5">Loading.......</h4>
-          }
-          {
-            error && <h4 className="text-center pt-5">{error}</h4>
-          }
-          {
-            !loading && !error && <Row>
-              <Col lg='8'>
-                <div className="tour__content">
-                  <img src={photo} alt="" />
-                  <div className="tour__info">
-                    <h2>{title}</h2>
-                    <div className="d-flex align-items-center gap-5">
-                      <span className="tour__rating d-flex align-items-center gap-1">
-                        <i class="ri-star-fill" style={{ color: "var(--secondary-color)" }}>
-                        </i>{avgRating === 0 ? null : avgRating}
-                        {totalRating === 0 ? ('Not Rated') : (<span>({reviews?.length})</span>)}
-                      </span>
-                      <span>
-                        <i class="ri-map-pin-user-fill"></i>{address}
-                      </span>
-                    </div>
-                    <div className="tour__extra-details">
-                      <span> <i class="ri-map-pin-2-line"></i>{city}</span>
-                      <span> <i class="ri-money-dollar-circle-line"></i> ₹{price}/ per person </span>
-                      <span> <i class="ri-map-pin-time-line"></i> {distance} / km </span>
-                      <span> <i class="ri-group-line"></i>{maxGroupSize} people</span>
-                    </div>
-                    <h5>Description</h5>
-                    <p>{desc}</p>
-                  </div>
-                  {/*================tour reviews section==================== */}
-                  <div className="tour__reviews mt-4">
-                    <h4>Reviews ({reviews?.length} reviews)</h4>
-                    <Form onSubmit={submitHandler}>
-                      <div className="d-flex align-items-center gap-3 mb-4 rating__group">
-                        1 <span onClick={() => setTourRating(1)}>
-                          <i class="ri-star-s-fill"></i></span>
-                        2 <span onClick={() => setTourRating(2)}>
-                          <i class="ri-star-s-fill"></i></span>
-                        3 <span onClick={() => setTourRating(3)}>
-                          <i class="ri-star-s-fill"></i></span>
-                        4 <span onClick={() => setTourRating(4)}>
-                          <i class="ri-star-s-fill"></i></span>
-                        5 <span onClick={() => setTourRating(5)}>
-                          <i class="ri-star-s-fill"></i></span>
-                      </div>
-                      <div className="review__input">
-                        <input type="text" ref={reviewMsgRef} placeholder="Share your Thoughts!" required />
-                        <button className='btn primary__btn text-white' type='submit'>
-                          Submit
-                        </button>
-                      </div>
+    <Container>
+      {loading && <Typography align="center" mt={5}>Loading...</Typography>}
+      {error && <Typography align="center" mt={5}>{error}</Typography>}
 
-                    </Form>
-                    <ListGroup className="user__reviews">
-                      {
-                        reviews?.map(review => (
-                          <div className="review__item">
-                            <img src={avatar} alt="" />
-                            <div className="w-100">
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div>
-                                  <h5>
-                                 {review.username}
-                                  </h5>
-                                  <p>
-                                    {new Date(review.createdAt).toLocaleDateString(
-                                      "en-US", options
-                                    )}
-                                  </p>
-                                </div>
-                                <span className="d-flex align-items-center">
-                                  {review.rating}
-                                  <i class="ri-star-s-fill"></i>
-                                </span>
-                              </div>
-                              <h6>{review.reviewText}</h6>
-                            </div>
-                          </div>
-                        ))
-                      }
-                    </ListGroup>
-                  </div>
+      {!loading && !error && (
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={photo}
+                  alt="Tour Image"
+                />
+                <CardContent>
+                  <Typography variant="h4">{title}</Typography>
+                  <Typography>{desc}</Typography>
+                  <Box mt={2} display="flex" gap={3}>
+                    <Typography>📍 {address}</Typography>
+                    <Typography>💰 ₹{price}/person</Typography>
+                    <Typography>🚶 {distance} km</Typography>
+                    <Typography>👥 {maxGroupSize} people</Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </motion.div>
 
+            <Box mt={4}>
+              <Typography variant="h5">Reviews ({reviews?.length})</Typography>
+              <form onSubmit={submitHandler}>
+                <Rating
+                  value={tourRating}
+                  onChange={(e, newValue) => setTourRating(newValue)}
+                  size="large"
+                />
+                <TextField
+                  inputRef={reviewMsgRef}
+                  placeholder="Share your thoughts"
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit">
+                  Submit
+                </Button>
+              </form>
+              <List>
+                {reviews?.map(review => (
+                  <ListItem key={review._id}>
+                    <Avatar src={avatar} />
+                    <Box ml={2}>
+                      <Typography variant="h6">{review.username}</Typography>
+                      <Typography>{review.reviewText}</Typography>
+                      <Rating value={review.rating} readOnly />
+                    </Box>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
 
-                  <div>
-                        <MapComponent/>
-                    </div>
+            <MapComponent />
+          </Grid>
 
-                  {/*================tour reviews section end==================== */}
-                </div>
+          <Grid item xs={12} md={4}>
+            <Booking tour={tour} avgRating={avgRating} />
+          </Grid>
+        </Grid>
+      )}
 
-                   
-
-
-              </Col>
-              <Col lg='4'>
-                <Booking tour={tour} avgRating={avgRating} />
-              </Col>
-            </Row>
-          }
-        </Container>
-      </section>
       <Newsletter />
-    </>
-  )
+    </Container>
+  );
 }
 
-export default TourDetails
+export default TourDetails;
