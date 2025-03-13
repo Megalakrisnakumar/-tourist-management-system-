@@ -10,7 +10,7 @@ import userIcon from '../../assets/images/user.png';
 const Register = () => {
 
   const [credentials, setCredentials] = useState({
-    userName: '',
+    username: '',
     email: '',
     password: ''
   });
@@ -75,7 +75,7 @@ const Register = () => {
                     label="Username"
                     fullWidth
                     required
-                    id="userName"
+                    id="username"
                     margin="normal"
                     onChange={handleChange}
                   />
