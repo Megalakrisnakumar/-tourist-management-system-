@@ -10,7 +10,7 @@ import userIcon from '../../assets/images/user.png';
 const AdminRegister = () => {
 
   const [credentials, setCredentials] = useState({
-    userName: '',
+    username: '',
     email: '',
     password: ''
   });
@@ -72,10 +72,10 @@ const AdminRegister = () => {
                 </Box>
                 <form onSubmit={handleClick}>
                   <TextField
-                    label="Username"
+                    label="username"
                     fullWidth
                     required
-                    id="userName"
+                    id="username"
                     margin="normal"
                     onChange={handleChange}
                   />
