@@ -72,7 +72,7 @@ const Register = () => {
                 </Box>
                 <form onSubmit={handleClick}>
                   <TextField
-                    label="Username"
+                    label="username"
                     fullWidth
                     required
                     id="username"

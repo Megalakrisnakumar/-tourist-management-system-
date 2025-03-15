@@ -12,6 +12,13 @@ import bookingRoute from './routes/bookings.js'
 import accoRoute from "./routes/accomondations.js"
 import { GetAllDashbard } from './controllers/dashboard.js'
 
+import packageRoute from "./routes/package.route.js";
+import packagebookingRoute from "./routes/booking.route.js";
+import packageratingRoute from "./routes/rating.route.js";
+import upload from './Middleware/fileupload.js'
+
+
+
 dotenv.config();
 
 
@@ -43,11 +50,20 @@ app.get("/", (req, res) => {
     res.send("api is working");
 })
 
+
+
 //middleware
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
+app.post('/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload an image' });
+    }
+    res.json({ message: 'Image uploaded successfully', file: req.file });
+  });
+
 app.use("/api/v1/auth" ,  authRoute);
 app.use("/api/v1/tours" , tourRoute);
 app.use("/api/v1/users" , userRoute);
@@ -55,6 +71,12 @@ app.use("/api/v1/review" , reviewRoute);
 app.use("/api/v1/booking" , bookingRoute);
 app.use("/api/v1/accomondation" , accoRoute);
 app.get("/dashboard",GetAllDashbard);
+
+app.use("/api/package", packageRoute);
+app.use("/api/package/booking", packagebookingRoute);
+app.use("/api/package/rating", packageratingRoute);
+
+
 
 
 //http://localhost:8000/api/v1/accomondationbooking/booking/:id
