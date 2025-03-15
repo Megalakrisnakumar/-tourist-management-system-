@@ -13,6 +13,10 @@ import AccBookingPage from '../Accomondation/Accomondationdetails'
 import { AuthContext } from '../../context/AuthContext'
 import AdminRegister from '../pages/adminregister'
 import UnauthorizedPage from '../pages/unauthorized'
+import AddPackages from '../Admin/AddPackages'
+import PackageAdminDashboard from '../Admin/AdminDashboard'
+import UpdatePackage from '../Admin/UpdatePackage'
+import Package from '../packages/Package'
 
 
 
@@ -42,7 +46,14 @@ const Routers = () => {
       {
         user?.role === "admin" ? <Route path='/dashboard' element={<Dashboard />} /> : null
       }
+      <Route path="admin/update-package/:id" element={<UpdatePackage />} />
+      <Route path="/package/:id" element={<Package />} />
+      {/* AddPackages */}
+      <Route path='/test' element={<AddPackages />} />
+      <Route path='/test1' element={<PackageAdminDashboard />} />
 
+
+      {/* PackageAdminDashboard */}
       <Route path='/*' element={<UnauthorizedPage />} />
 
     </Routes>

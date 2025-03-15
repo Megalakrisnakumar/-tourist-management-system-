@@ -1,0 +1,113 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Rating, Button, Typography, Card, CardContent, IconButton, Snackbar } from "@mui/material";
+import { FaShare, FaArrowLeft, FaMapMarkerAlt, FaClock, FaArrowDown, FaArrowUp, FaArrowRight } from "react-icons/fa";
+import MuiCarousel from "./MuiCarousel";
+import RatingCard from "./RatingCard";
+
+const PackageDetails = ({ loading, error, packageData, currentUser, ratingsData, setRatingsData, ratingGiven, packageRatings, giveRating }) => {
+  const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <div>
+      {loading && <Typography align="center" variant="h6">Loading...</Typography>}
+      {error && (
+        <Card sx={{ textAlign: "center", padding: 2, margin: 2, backgroundColor: "#ffdddd" }}>
+          <Typography color="error">Something went wrong!</Typography>
+          <Button variant="contained" color="primary" component={Link} to="/">
+            Back
+          </Button>
+        </Card>
+      )}
+      {packageData && !loading && !error && (
+        <div>
+          <MuiCarousel images={packageData.packageImages} />
+
+          <IconButton
+            sx={{ position: "absolute", top: "10%", right: "3%", backgroundColor: "white" }}
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              setCopied(true);
+            }}
+          >
+            <FaShare />
+          </IconButton>
+
+          <IconButton sx={{ position: "absolute", top: "10%", left: "3%", backgroundColor: "white" }} onClick={() => navigate("/")}> 
+            <FaArrowLeft />
+          </IconButton>
+
+          <Card sx={{ padding: 3, margin: 3 }}>
+            <CardContent>
+              <Typography variant="h4" gutterBottom>{packageData.packageName}</Typography>
+              <Typography variant="h5">
+                {packageData.packageOffer ? (
+                  <>
+                    <span style={{ textDecoration: "line-through", color: "gray" }}>${packageData.packagePrice}</span> - ${packageData.packageDiscountPrice}
+                    <span style={{ backgroundColor: "green", color: "white", padding: "5px", borderRadius: "5px", marginLeft: "10px" }}>
+                      {Math.floor(((+packageData.packagePrice - +packageData.packageDiscountPrice) / +packageData.packagePrice) * 100)}% Off
+                    </span>
+                  </>
+                ) : (
+                  <span>${packageData.packagePrice}</span>
+                )}
+              </Typography>
+              <Typography color="success.main"><FaMapMarkerAlt /> {packageData.packageDestination}</Typography>
+              {(+packageData.packageDays > 0 || +packageData.packageNights > 0) && (
+                <Typography><FaClock /> {packageData.packageDays} Days - {packageData.packageNights} Nights</Typography>
+              )}
+              {packageData.packageTotalRatings > 0 && (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Rating value={packageData.packageRating || 0} readOnly precision={0.1} />
+                  <Typography>({packageData.packageTotalRatings})</Typography>
+                </div>
+              )}
+              <Typography variant="body1">{packageData.packageDescription}</Typography>
+              <Button variant="contained" color="success" fullWidth onClick={() => navigate(currentUser ? `/booking/${packageData.id}` : "/login")}>Book</Button>
+              <Typography variant="h6">Accommodation:</Typography>
+              <Typography>{packageData.packageAccommodation}</Typography>
+              <Typography variant="h6">Activities:</Typography>
+              <Typography>{packageData.packageActivities}</Typography>
+              <Typography variant="h6">Meals:</Typography>
+              <Typography>{packageData.packageMeals}</Typography>
+              <Typography variant="h6">Transportation:</Typography>
+              <Typography>{packageData.packageTransportation}</Typography>
+              {packageRatings && (
+                <div>
+                  <Typography variant="h6">Rating/Reviews:</Typography>
+                  {!currentUser || ratingGiven ? null : (
+                    <>
+                      <Rating value={ratingsData.rating} onChange={(e, newValue) => setRatingsData({ ...ratingsData, rating: newValue })} />
+                      <textarea
+                        rows={3}
+                        placeholder="Review"
+                        value={ratingsData.review}
+                        onChange={(e) => setRatingsData({ ...ratingsData, review: e.target.value })}
+                      ></textarea>
+                      <Button variant="contained" color="success" onClick={giveRating} disabled={ratingsData.rating === 0 && ratingsData.review === "" || loading}>
+                        {loading ? "Loading..." : "Submit"}
+                      </Button>
+                    </>
+                  )}
+                  <div>
+                    <RatingCard packageRatings={packageRatings} />
+                    {packageData.packageTotalRatings > 4 && (
+                      <Button variant="outlined" onClick={() => navigate(`/package/ratings/${packageData.id}`)}>View All <FaArrowRight /></Button>
+                    )}
+                  </div>
+                </div>
+              )}
+              {!currentUser && (
+                <Button variant="contained" color="success" onClick={() => navigate("/login")}>Rate Package</Button>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      <Snackbar open={copied} autoHideDuration={2000} message="Link copied!" onClose={() => setCopied(false)} />
+    </div>
+  );
+};
+
+export default PackageDetails;
