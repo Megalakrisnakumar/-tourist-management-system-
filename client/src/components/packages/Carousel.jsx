@@ -5,7 +5,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import Carous
 
 const MuiCarousel = ({ images }) => {
     return (
-        <Box sx={{ width: '70%', maxWidth: 500, margin: 'auto' }}>
+        <Box sx={{ width: '70%', height:"50%", margin: 'auto' }}>
             <Carousel
                 autoPlay
                 interval={2000} // Set the interval to 3 seconds
@@ -18,14 +18,14 @@ const MuiCarousel = ({ images }) => {
                         return (
                             <div key={index}>
                                 <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
-                                    <img src={image} alt={`Slide ${index + 1}`} />
+                                    <img height={"600px"} src={image} alt={`Slide ${index + 1}`} />
                                 </Paper>
                             </div>
                         );
                     })
                 }
             </Carousel>
-        </Box>
+        </Box> 
     );
 };
 

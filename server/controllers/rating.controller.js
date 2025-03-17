@@ -2,12 +2,12 @@ import Package from "../models/package.model.js";
 import RatingReview from "../models/ratings_reviews.model.js";
 
 export const giveRating = async (req, res) => {
-  if (req.user.id !== req.body.userRef) {
-    return res.status(401).send({
-      success: false,
-      message: "You can only give rating on your own account!",
-    });
-  }
+  // if (req.user.id !== req.body.userRef) {
+  //   return res.status(401).send({
+  //     success: false,
+  //     message: "You can only give rating on your own account!",
+  //   });
+  // }
   try {
     const newRating = await RatingReview.create(req.body);
     if (newRating) {
