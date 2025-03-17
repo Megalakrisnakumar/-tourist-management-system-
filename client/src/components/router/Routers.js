@@ -17,6 +17,7 @@ import AddPackages from '../Admin/AddPackages'
 import PackageAdminDashboard from '../Admin/AdminDashboard'
 import UpdatePackage from '../Admin/UpdatePackage'
 import Package from '../packages/Package'
+import PackageBooking from '../packages/Booking'
 
 
 
@@ -48,6 +49,9 @@ const Routers = () => {
       }
       <Route path="admin/update-package/:id" element={<UpdatePackage />} />
       <Route path="/package/:id" element={<Package />} />
+      <Route path="/booking/:id" element={<PackageBooking />} />
+      
+      {/* PackageBooking */}
       {/* AddPackages */}
       <Route path='/test' element={<AddPackages />} />
       <Route path='/test1' element={<PackageAdminDashboard />} />

@@ -78,6 +78,7 @@ const Package = () => {
           packageRating: data?.packageData?.packageRating,
           packageTotalRatings: data?.packageData?.packageTotalRatings,
           packageImages: data?.packageData?.packageImages,
+          _id:data?.packageData?._id
         });
         setLoading(false);
       } else {
@@ -110,7 +111,7 @@ const Package = () => {
     }
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/rating/give-rating", {
+      const res = await fetch("http://localhost:8000/api/package/rating/give-rating", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +136,7 @@ const Package = () => {
 
   const getRatings = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/rating/get-ratings/${params.id}/4`);
+      const res = await fetch(`http://localhost:8000/api/package/rating/get-ratings/${params.id}/4`);
       const data = await res.json();
       if (data) {
         setPackageRatings(data);
@@ -151,7 +152,7 @@ const Package = () => {
   const checkRatingGiven = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/rating/rating-given/${currentUser?._id}/${params?.id}`
+        `http://localhost:8000/api/package/rating/rating-given/${currentUser?._id}/${params?.id}`
       );
       const data = await res.json();
       setRatingGiven(data?.given);
@@ -184,7 +185,8 @@ const Package = () => {
         )}
         {packageData && !loading && !error && (
           <div   style={{display:"flex",alignItems:"center",justifyContent:"space-evenly",gap:"30px"}}>
-            <MuiCarousel images={packageData.packageImages} />
+            <br />
+            <MuiCarousel images={packageData.packageImages}  />
   
             <IconButton
               sx={{ position: "absolute", top: "10%", right: "3%", backgroundColor: "white" }}
@@ -200,7 +202,7 @@ const Package = () => {
               <FaArrowLeft />
             </IconButton>
   
-            <Card sx={{ padding: 3, margin: 3 }}>
+            <Card sx={{ padding: 3, margin: 3 ,width:"100%" }}>
               <CardContent>
                 <Typography variant="h4" gutterBottom>{packageData.packageName}</Typography>
                 <Typography variant="h5">
@@ -226,7 +228,10 @@ const Package = () => {
                   </div>
                 )}
                 <Typography variant="body1">{packageData.packageDescription}</Typography>
-                <Button variant="contained" color="success" fullWidth onClick={() => navigate(currentUser ? `/booking/${packageData.id}` : "/login")}>Book</Button>
+                {
+                console.log(packageData)
+                }
+                <Button variant="contained" color="success" fullWidth onClick={() => navigate(currentUser ? `/booking/${packageData._id}` : "/login")}>Book</Button>
                 <Typography variant="h6">Accommodation:</Typography>
                 <Typography>{packageData.packageAccommodation}</Typography>
                 <Typography variant="h6">Activities:</Typography>
@@ -255,7 +260,7 @@ const Package = () => {
                     <div>
                       <RatingCard packageRatings={packageRatings} />
                       {packageData.packageTotalRatings > 4 && (
-                        <Button variant="outlined" onClick={() => navigate(`/package/ratings/${packageData.id}`)}>View All <FaArrowRight /></Button>
+                        <Button variant="outlined" onClick={() => navigate(`/package/ratings/${packageData._id}`)}>View All <FaArrowRight /></Button>
                       )}
                     </div>
                   </div>

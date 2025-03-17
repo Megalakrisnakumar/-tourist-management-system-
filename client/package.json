@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.2.3",
+    "braintree-web-drop-in-react": "^1.2.1",
     "firebase": "^11.4.0",
     "framer-motion": "^12.4.11",
     "leaflet": "^1.9.4",
