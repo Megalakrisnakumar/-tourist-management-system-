@@ -1,0 +1,172 @@
+import React, { useCallback, useEffect, useState } from "react";
+// import "./styles/Home.css";
+import { FaCalendar, FaSearch, FaStar } from "react-icons/fa";
+import { FaRankingStar } from "react-icons/fa6";
+import { LuBadgePercent } from "react-icons/lu";
+
+import { useNavigate } from "react-router";
+import PackageCard from "../Cards/pacakgeCard";
+import { Button, TextField, Box, Typography, Grid, Card, CardContent, Paper } from "@mui/material";
+import { Search, Percent, Star, CalendarToday, BarChart } from "@mui/icons-material";
+import { motion } from "framer-motion";
+
+const Packages = () => {
+  const navigate = useNavigate();
+  const [topPackages, setTopPackages] = useState([]);
+  const [latestPackages, setLatestPackages] = useState([]);
+  const [offerPackages, setOfferPackages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const getTopPackages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "http://localhost:8000/api/package/get-packages?sort=packageRating&limit=8"
+      );
+      const data = await res.json();
+      if (data?.success) {
+        setTopPackages(data?.packages);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        alert(data?.message || "Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [topPackages]);
+
+  const getLatestPackages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "http://localhost:8000/api/package/get-packages?sort=createdAt&limit=8"
+      );
+      const data = await res.json();
+      if (data?.success) {
+        setLatestPackages(data?.packages);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        alert(data?.message || "Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [latestPackages]);
+
+  const getOfferPackages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "http://localhost:8000/api/package/get-packages?sort=createdAt&offer=true&limit=6"
+      );
+      const data = await res.json();
+      if (data?.success) {
+        setOfferPackages(data?.packages);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        alert(data?.message || "Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [offerPackages]);
+
+  useEffect(() => {
+    getTopPackages();
+    getLatestPackages();
+    getOfferPackages();
+  }, []);
+
+  return (
+  <Box sx={{ width: "100%", textAlign: "center", bgcolor: "#0D1117", color: "white", p: 4 }}>
+       {/* Background Image */}
+       <Paper elevation={6} sx={{ width: "100%", height: "350px", backgroundImage: "url('/background.jpg')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: 3 }}></Paper>
+       
+       {/* Heading */}
+       <Typography variant="h3" fontWeight="bold" sx={{ textDecoration: "underline", mt: -10, mb: 2, color: "#FFD700" }}>
+         The Travel Index
+       </Typography>
+       <Typography variant="h6" sx={{ mb: 4, color: "#BBDEFB" }}>
+         Make Your Travel Dream Come True With Our Amazing Packages
+       </Typography>
+       
+       {/* Search Bar */}
+       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mt: 2 }}>
+         <TextField
+           variant="outlined"
+           placeholder="Search"
+           value={search}
+           onChange={(e) => setSearch(e.target.value)}
+           sx={{ bgcolor: "white", borderRadius: 3, width: "40%", input: { color: "black" } }}
+         />
+         <Button
+           variant="contained"
+           sx={{ p: 2, borderRadius: "50%", bgcolor: "#FFD700", color: "black", '&:hover': { bgcolor: "#FFC107" } }}
+           onClick={() => navigate(`/search?searchTerm=${search}`)}
+         >
+           <Search />
+         </Button>
+       </Box>
+       
+       {/* Category Buttons */}
+       <Grid container spacing={2} justifyContent="center" sx={{ mt: 4 }}>
+         {[{ text: "Best Offers", icon: <Percent />, path: "/search?offer=true" },
+           { text: "Top Rated", icon: <Star />, path: "/search?sort=packageRating" },
+           { text: "Latest", icon: <CalendarToday />, path: "/search?sort=createdAt" },
+           { text: "Most Rated", icon: <BarChart />, path: "/search?sort=packageTotalRatings" }
+         ].map(({ text, icon, path }, i) => (
+           <Grid item key={i}>
+             <motion.div whileHover={{ scale: 1.1 }}>
+               <Button
+                 variant="contained"
+                 sx={{ borderRadius: "30px", p: 1.5, fontSize: "1rem", bgcolor: "#1976D2", color: "white", '&:hover': { bgcolor: "#1565C0" } }}
+                 startIcon={icon}
+                 onClick={() => navigate(path)}
+               >
+                 {text}
+               </Button>
+             </motion.div>
+           </Grid>
+         ))}
+       </Grid>
+       
+       {/* Packages */}
+       <Box sx={{ mt: 6 }}>
+         {loading && <Typography variant="h5">Loading...</Typography>}
+         {!loading && !topPackages.length && !latestPackages.length && !offerPackages.length && (
+           <Typography variant="h5">No Packages Yet!</Typography>
+         )}
+         
+         {[{ title: "Top Packages", data: topPackages },
+           { title: "Latest Packages", data: latestPackages },
+           { title: "Best Offers", data: offerPackages }].map(({ title, data }, index) => (
+           !loading && data.length > 0 && (
+             <Box key={index} sx={{ mt: 5 }}>
+               <Typography variant="h4" fontWeight="bold" sx={{ color: "#FFD700" }}>{title}</Typography>
+               <Grid container spacing={3} justifyContent="center" sx={{ mt: 3 }}>
+                 {data.map((packageData, i) => (
+                   <Grid item key={i}>
+                     <motion.div whileHover={{ scale: 1.05 }}>
+                       <Card sx={{ maxWidth: 320, bgcolor: "#1E1E1E", color: "white", borderRadius: 3, boxShadow: "0px 4px 10px rgba(255, 215, 0, 0.3)" }}>
+                         <CardContent>
+                           <Typography variant="h6" fontWeight="bold" sx={{ color: "#FFC107" }}>{packageData.name}</Typography>
+                           <Typography sx={{ color: "#BBDEFB" }}>{packageData.description}</Typography>
+                         </CardContent>
+                       </Card>
+                     </motion.div>
+                   </Grid>
+                 ))}
+               </Grid>
+             </Box>
+           )
+         ))}
+       </Box>
+     </Box>
+  );
+};
+
+export default Packages;

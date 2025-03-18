@@ -20,6 +20,9 @@ import Package from '../packages/Package'
 import PackageBooking from '../packages/Booking'
 import Profile from '../pages/Profile'
 import AllPackages from '../Admin/AllPackages'
+import Packages from '../pages/Packeges'
+import Search from '../pages/search'
+// import { Search } from '@mui/icons-material'
 
 
 
@@ -43,7 +46,8 @@ const Routers = () => {
       <Route path='/register' element={<Register />} />
       <Route path='/thank-you' element={<ThankYou />} />
       <Route path='/tours/search' element={<SearchResultList />} />
-      <Route path='/packages' element={<AllPackages />} />
+      <Route path='/packages' element={<Packages />} />
+      <Route path="/search" element={<Search />} />
 
 
       {/* admin routes */}
