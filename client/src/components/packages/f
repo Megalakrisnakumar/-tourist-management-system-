@@ -1,0 +1,84 @@
+import React, { useState } from "react";
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Button } from "@mui/material";
+import { Home, Tour, Hotel, Add, Book, CardTravel } from "@mui/icons-material";
+import { motion } from "framer-motion";
+
+const menuItems = [
+  { text: "Main Dashboard", icon: <Home />, option: "Dashboard" },
+  { text: "Add Tour", icon: <Add />, option: "Addtour" },
+  { text: "Bookings", icon: <Book />, option: "Bookings" },
+  { text: "Tours", icon: <Tour />, option: "Tour" },
+  { text: "Accommodation List", icon: <Hotel />, option: "AccommodationTable" },
+  { text: "Accommodation Bookings", icon: <Book />, option: "BookingsAccomondationlist" },
+  { text: "Add Accommodation", icon: <Add />, option: "AddAccommodation" },
+  { text: "Packages", icon: <CardTravel />, option: "Packages" }
+];
+
+const Sidebar = ({ setOptions }) => {
+  const [active, setActive] = useState("Dashboard");
+
+  return (
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: 250,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: 250,
+          background: "linear-gradient(135deg, #1e3c72, #2a5298)",
+          color: "#fff",
+          paddingTop: 2,
+        },
+      }}
+    >
+      <motion.h4
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ textAlign: "center", marginBottom: "20px" }}
+      >
+        HORIZON FREE
+      </motion.h4>
+      <List>
+        {menuItems.map((item) => (
+          <ListItemButton
+            key={item.text}
+            onClick={() => {
+              setOptions(item.option);
+              setActive(item.option);
+            }}
+            sx={{
+              color: active === item.option ? "#ffeb3b" : "#fff",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                transform: "scale(1.05)",
+              },
+              transition: "all 0.3s ease",
+            }}
+          >
+            <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItemButton>
+        ))}
+      </List>
+      <motion.div
+        className="mt-5"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ padding: "10px" }}
+      >
+        <Button
+          variant="contained"
+          color="warning"
+          fullWidth
+          sx={{ borderRadius: "20px" }}
+        >
+          Back To Home
+        </Button>
+      </motion.div>
+    </Drawer>
+  );
+};
+
+export default Sidebar;

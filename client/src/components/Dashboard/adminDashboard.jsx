@@ -43,7 +43,8 @@ const AdminDashboard = () => {
         { title: 'Tour Places', value: data.tourCount, bgColor: '#FFF3E0' },
         { title: 'Canceled Bookings', value: data.canceledBookings, bgColor: '#F3E5F5' },
         { title: 'Weekly Revenue', value: `₹${data.weeklyRevenue}`, bgColor: '#E1F5FE' },
-        { title: 'Total Revenue', value: `₹${data.totalRevenue}`, bgColor: '#FBE9E7' }
+        { title: 'Total Revenue', value: `₹${data.totalRevenue}`, bgColor: '#FBE9E7' },
+       
     ];
 
     return (

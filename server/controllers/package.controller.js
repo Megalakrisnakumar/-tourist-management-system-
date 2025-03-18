@@ -4,12 +4,12 @@ import dotenv from "dotenv";
 import Booking from "../models/booking.model.js";
 dotenv.config();
 
-// //payment gateway
+ //payment gateway
 var gateway = new braintree.BraintreeGateway({
   environment: braintree.Environment.Sandbox,
-  merchantId: process.env.BRAINTREE_MERCHANT_ID,
-  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+  merchantId: "sxsfkh8bh344wtw4",
+  publicKey: "hgb6d3vbdp9y3t9f",
+  privateKey:"0523c4e081b2b8f7952ae4620c734c57",
 });
 
 //create package
@@ -190,9 +190,16 @@ export const braintreeTokenController = async (req, res) => {
   try {
     gateway.clientToken.generate({}, function (err, response) {
       if (err) {
+        console.log("errr",err);
+        
         res.status(500).send(err);
       } else {
+
+        console.log(response);
+        
+
         res.send(response);
+        
       }
     });
   } catch (error) {

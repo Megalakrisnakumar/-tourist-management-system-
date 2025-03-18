@@ -4,15 +4,18 @@ import { ObjectId } from "mongodb";
 
 //book package
 export const bookPackage = async (req, res) => {
+
   try {
     const { packageDetails, buyer, totalPrice, persons, date } = req.body;
+    console.log(req.body);
+    
 
-    if (req.user.id !== buyer) {
-      return res.status(401).send({
-        success: false,
-        message: "You can only buy on your account!",
-      });
-    }
+    // if (req.user.id !== buyer) {
+    //   return res.status(401).send({
+    //     success: false,
+    //     message: "You can only buy on your account!",
+    //   });
+    // }
 
     if (!packageDetails || !buyer || !totalPrice || !persons || !date) {
       return res.status(200).send({
@@ -132,12 +135,12 @@ export const getAllBookings = async (req, res) => {
 //get current bookings for user by id
 export const getUserCurrentBookings = async (req, res) => {
   try {
-    if (req?.user?.id !== req?.params?.id) {
-      return res.status(401).send({
-        success: false,
-        message: "You can only get your own bookings!!",
-      });
-    }
+    // if (req?.user?.id !== req?.params?.id) {
+    //   return res.status(401).send({
+    //     success: false,
+    //     message: "You can only get your own bookings!!",
+    //   });
+    // }
     const searchTerm = req?.query?.searchTerm || "";
     const bookings = await Booking.find({
       buyer: new ObjectId(req?.params?.id),
@@ -178,12 +181,12 @@ export const getUserCurrentBookings = async (req, res) => {
 //get all bookings by user id
 export const getAllUserBookings = async (req, res) => {
   try {
-    if (req?.user?.id !== req?.params?.id) {
-      return res.status(401).send({
-        success: false,
-        message: "You can only get your own bookings!!",
-      });
-    }
+    // if (req?.user?.id !== req?.params?.id) {
+    //   return res.status(401).send({
+    //     success: false,
+    //     message: "You can only get your own bookings!!",
+    //   });
+    // }
     const searchTerm = req?.query?.searchTerm || "";
     const bookings = await Booking.find({
       buyer: new ObjectId(req?.params?.id),

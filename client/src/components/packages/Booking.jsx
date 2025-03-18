@@ -104,7 +104,10 @@ const PackageBooking = () => {
       return;
     }
     try {
+
       setLoading(true);
+      console.log(params?.id);
+      
       const res = await fetch(`http://localhost:8000/api/package/booking/book-package/${params?.id}`, {
         method: "POST",
         headers: {
@@ -255,7 +258,7 @@ const PackageBooking = () => {
                     fullWidth
                     sx={{ mt: 2, py: 1.5, fontWeight: "bold" }}
                     onClick={handleBookPackage}
-                    disabled={loading || !instance || !currentUser?.address}
+                    // disabled={loading || !instance || !currentUser?.address}
                   >
                     {loading ? "Processing..." : "Book Now"}
                   </Button>

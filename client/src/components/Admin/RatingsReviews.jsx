@@ -1,6 +1,8 @@
 import { Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Box, Paper, TextField, Typography, Button, List, ListItem } from "@mui/material";
+import { motion } from "framer-motion";
 
 const RatingsReviews = () => {
   const [packages, setPackages] = useState([]);
@@ -8,6 +10,7 @@ const RatingsReviews = () => {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [showMoreBtn, setShowMoreBtn] = useState(false);
+  
 
   const getPackages = async () => {
     setPackages([]);
@@ -15,8 +18,8 @@ const RatingsReviews = () => {
       setLoading(true);
       let url =
         filter === "most" //most rated
-          ? `/api/package/get-packages?searchTerm=${search}&sort=packageTotalRatings`
-          : `/api/package/get-packages?searchTerm=${search}&sort=packageRating`; //all
+          ? `http://localhost:8000/api/package/get-packages?searchTerm=${search}&sort=packageTotalRatings`
+          : `http://localhost:8000/api/package/get-packages?searchTerm=${search}&sort=packageRating`; //all
       const res = await fetch(url);
       const data = await res.json();
       if (data?.success) {
@@ -45,8 +48,8 @@ const RatingsReviews = () => {
     const startIndex = numberOfPackages;
     let url =
       filter === "most" //most rated
-        ? `/api/package/get-packages?searchTerm=${search}&sort=packageTotalRatings&startIndex=${startIndex}`
-        : `/api/package/get-packages?searchTerm=${search}&sort=packageRating&startIndex=${startIndex}`; //all
+        ? `http://localhost:8000/api/package/get-packages?searchTerm=${search}&sort=packageTotalRatings&startIndex=${startIndex}`
+        : `http://localhost:8000/api/package/get-packages?searchTerm=${search}&sort=packageRating&startIndex=${startIndex}`; //all
     const res = await fetch(url);
     const data = await res.json();
     if (data?.packages?.length < 9) {
@@ -57,92 +60,103 @@ const RatingsReviews = () => {
 
   return (
     <>
-      <div className="shadow-xl rounded-lg w-full flex flex-col p-5 justify-center gap-2">
-        {loading && <h1 className="text-center text-lg">Loading...</h1>}
-        {packages && (
-          <>
-            <div>
-              <input
-                className="p-2 rounded border"
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                }}
-              />
-            </div>
-            <div className="my-2 border-y-2 py-2">
-              <ul className="w-full flex justify-around">
-                <li
-                  className={`cursor-pointer hover:scale-95 border rounded-xl p-2 transition-all duration-300 ${
-                    filter === "all" && "bg-blue-500 text-white"
-                  }`}
-                  id="all"
-                  onClick={(e) => {
-                    setFilter(e.target.id);
+        <Paper elevation={6} sx={{ width: "100%", p: 5, borderRadius: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+            {loading && <Typography variant="h6" align="center">Loading...</Typography>}
+            {packages && (
+              <>
+                <Box>
+                  <TextField
+                    fullWidth
+                    label="Search"
+                    variant="outlined"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </Box>
+                <Box my={2} py={2} borderBottom={2} borderTop={2}>
+                  <List sx={{ display: "flex", justifyContent: "space-around" }}>
+                    <ListItem
+                      button
+                      selected={filter === "all"}
+                      onClick={() => setFilter("all")}
+                      sx={{
+                        borderRadius: 2,
+                        transition: "transform 0.3s",
+                        "&:hover": { transform: "scale(0.95)" },
+                        bgcolor: filter === "all" ? "primary.main" : "transparent",
+                        color: filter === "all" ? "white" : "inherit",
+                      }}
+                    >
+                      All
+                    </ListItem>
+                    <ListItem
+                      button
+                      selected={filter === "most"}
+                      onClick={() => setFilter("most")}
+                      sx={{
+                        borderRadius: 2,
+                        transition: "transform 0.3s",
+                        "&:hover": { transform: "scale(0.95)" },
+                        bgcolor: filter === "most" ? "primary.main" : "transparent",
+                        color: filter === "most" ? "white" : "inherit",
+                      }}
+                    >
+                      Most Rated
+                    </ListItem>
+                  </List>
+                </Box>
+              </>
+            )}
+            {packages ? (
+              packages.map((pack, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "16px",
+                    borderBottom: "2px solid #ddd",
                   }}
                 >
-                  All
-                </li>
-                <li
-                  className={`cursor-pointer hover:scale-95 border rounded-xl p-2 transition-all duration-300 ${
-                    filter === "most" && "bg-blue-500 text-white"
-                  }`}
-                  id="most"
-                  onClick={(e) => {
-                    setFilter(e.target.id);
-                  }}
-                >
-                  Most Rated
-                </li>
-              </ul>
-            </div>
-          </>
-        )}
-        {/* packages */}
-        {packages ? (
-          packages.map((pack, i) => {
-            return (
-              <div
-                className="border rounded-lg w-full flex p-3 justify-between gap-2 flex-wrap items-center hover:scale-[1.02] transition-all duration-300"
-                key={i}
+                  <Link to={`/package/ratings/${pack._id}`}>
+                    <img
+                      src={pack?.packageImages[0]}
+                      alt="image"
+                      style={{ width: 80, height: 80, borderRadius: "8px" }}
+                    />
+                  </Link>
+                  <Link to={`/package/ratings/${pack._id}`}>
+                    <Typography
+                      variant="body1"
+                      sx={{ textDecoration: "none", cursor: "pointer", "&:hover": { textDecoration: "underline" } }}
+                    >
+                      {pack?.packageName}
+                    </Typography>
+                  </Link>
+                  <Typography variant="body1" sx={{ display: "flex", alignItems: "center" }}>
+                    <Rating value={pack?.packageRating} precision={0.1} readOnly /> ({pack?.packageTotalRatings})
+                  </Typography>
+                </motion.div>
+              ))
+            ) : (
+              <Typography variant="h5" align="center">No Ratings Available!</Typography>
+            )}
+            {showMoreBtn && (
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ alignSelf: "center", textTransform: "none" }}
+                onClick={onShowMoreSClick}
               >
-                <Link to={`/package/ratings/${pack._id}`}>
-                  <img
-                    src={pack?.packageImages[0]}
-                    alt="image"
-                    className="w-20 h-20 rounded"
-                  />
-                </Link>
-                <Link to={`/package/ratings/${pack._id}`}>
-                  <p className="font-semibold hover:underline">
-                    {pack?.packageName}
-                  </p>
-                </Link>
-                <p className="flex items-center">
-                  <Rating
-                    value={pack?.packageRating}
-                    precision={0.1}
-                    readOnly
-                  />
-                  ({pack?.packageTotalRatings})
-                </p>
-              </div>
-            );
-          })
-        ) : (
-          <h1 className="text-center text-2xl">No Ratings Available!</h1>
-        )}
-        {showMoreBtn && (
-          <button
-            onClick={onShowMoreSClick}
-            className="text-sm bg-green-700 text-white hover:underline p-2 m-3 rounded text-center w-max"
-          >
-            Show More
-          </button>
-        )}
-      </div>
+                Show More
+              </Button>
+            )}
+          </Paper>
     </>
   );
 };
