@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { TextField, Card, Typography, Button, Box, Avatar } from "@mui/material";
+import { motion } from "framer-motion";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const MyHistory = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const currentUser = JSON.parse(localStorage.getItem("user"))
   const [allBookings, setAllBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -12,8 +15,8 @@ const MyHistory = () => {
   const getAllBookings = async () => {
     try {
       setLoading(true);
-      const res = await fetch(
-        `/api/booking/get-allUserBookings/${currentUser?._id}?searchTerm=${search}`
+      const res = await fetch(        
+        `http://localhost:8000/api/package/booking/get-allUserBookings/${currentUser?._id}?searchTerm=${search}`
       );
       const data = await res.json();
       if (data?.success) {
@@ -37,7 +40,7 @@ const MyHistory = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        `/api/booking/delete-booking-history/${id}/${currentUser._id}`,
+        `http://localhost:8000/api/booking/delete-booking-history/${id}/${currentUser._id}`,
         {
           method: "DELETE",
         }
@@ -57,61 +60,76 @@ const MyHistory = () => {
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-[95%] shadow-xl rounded-lg p-3 flex flex-col gap-2">
-        <h1 className="text-center text-2xl">History</h1>
-        {loading && <h1 className="text-center text-2xl">Loading...</h1>}
-        {error && <h1 className="text-center text-2xl">{error}</h1>}
-        <div className="w-full border-b-4">
-          <input
-            className="border rounded-lg p-2 mb-2"
-            type="text"
-            placeholder="Search"
+    <Box display="flex" justifyContent="center" width="100%" p={3}>
+      <Card sx={{ width: "95%", boxShadow: 10, borderRadius: 4, p: 3 }}>
+        <Typography variant="h4" align="center" fontWeight={600} gutterBottom>
+          History
+        </Typography>
+        {loading && <Typography variant="h5" align="center">Loading...</Typography>}
+        {error && <Typography variant="h5" align="center" color="error">{error}</Typography>}
+        
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Search"
+            variant="outlined"
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
           />
-        </div>
-        {!loading &&
-          allBookings &&
-          allBookings.map((booking, i) => {
-            return (
-              <div
-                className="w-full border-y-2 p-3 flex flex-wrap overflow-auto gap-3 items-center justify-between"
-                key={i}
+        </Box>
+        
+        {!loading && allBookings &&
+          allBookings.map((booking, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  p: 2,
+                  mb: 2,
+                  boxShadow: 5,
+                }}
               >
-                <Link to={`/package/${booking?.packageDetails?._id}`}>
-                  <img
-                    className="w-12 h-12"
-                    src={booking?.packageDetails?.packageImages[0]}
-                    alt="Package Image"
-                  />
-                </Link>
-                <Link to={`/package/${booking?.packageDetails?._id}`}>
-                  <p className="hover:underline">
-                    {booking?.packageDetails?.packageName}
-                  </p>
-                </Link>
-                <p>{booking?.buyer?.username}</p>
-                <p>{booking?.buyer?.email}</p>
-                <p>{booking?.date}</p>
-                {(new Date(booking?.date).getTime() < new Date().getTime() ||
-                  booking?.status === "Cancelled") && (
-                  <button
-                    onClick={() => {
-                      handleHistoryDelete(booking._id);
-                    }}
-                    className="p-2 rounded bg-red-600 text-white hover:opacity-95"
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Link to={`/package/${booking?.packageDetails?._id}`}>
+                    <Avatar
+                      src={booking?.packageDetails?.packageImages[0]}
+                      sx={{ width: 56, height: 56, border: "2px solid #1976D2" }}
+                    />
+                  </Link>
+                  <Box>
+                    <Link to={`/package/${booking?.packageDetails?._id}`}>
+                      <Typography variant="h6" sx={{ '&:hover': { textDecoration: "underline" } }}>
+                        {booking?.packageDetails?.packageName}
+                      </Typography>
+                    </Link>
+                    <Typography variant="body2" color="textSecondary">
+                      {booking?.buyer?.username} ({booking?.buyer?.email})
+                    </Typography>
+                  </Box>
+                </Box>
+                <Typography variant="body1" fontWeight={500}>{booking?.date}</Typography>
+                {(new Date(booking?.date).getTime() < new Date().getTime() || booking?.status === "Cancelled") && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => handleHistoryDelete(booking._id)}
                   >
                     Delete
-                  </button>
+                  </Button>
                 )}
-              </div>
-            );
-          })}
-      </div>
-    </div>
+              </Card>
+            </motion.div>
+          ))}
+      </Card>
+    </Box>
   );
 };
 

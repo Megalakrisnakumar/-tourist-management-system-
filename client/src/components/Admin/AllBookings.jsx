@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Chart from "./chart/Chartpackage";
+import { Box, Paper, TextField, Typography, Button, List, ListItem, Avatar } from "@mui/material";
+import { motion } from "framer-motion";
 
 const AllBookings = () => {
   const currentUser=JSON.parse(localStorage.getItem("user"))
@@ -16,7 +18,7 @@ const AllBookings = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        `http://localhost:8000/api/booking/get-currentBookings?searchTerm=${searchTerm}`
+        `http://localhost:8000/api/package/booking/get-currentBookings?searchTerm=${searchTerm}`
       );
       const data = await res.json();
       if (data?.success) {
@@ -60,58 +62,64 @@ const AllBookings = () => {
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-[95%] shadow-xl rounded-lg p-3 px-1 flex flex-col gap-2">
-        {loading && <h1 className="text-center text-2xl">Loading...</h1>}
-        {error && <h1 className="text-center text-2xl">{error}</h1>}
-        <div className="w-full border-b-4 p-3">
-          <input
-            className="border rounded-lg p-2 mb-2"
-            type="text"
-            placeholder="Search Username or Email"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-          />
-          {currentBookings.length > 0 && <Chart data={currentBookings} />}
-        </div>
-        {!loading &&
-          currentBookings &&
-          currentBookings.map((booking, i) => {
-            return (
-              <div
-                className="w-full border-y-2 p-3 flex flex-wrap overflow-auto gap-3 items-center justify-between"
-                key={i}
-              >
-                <Link to={`/package/${booking?.packageDetails?._id}`}>
-                  <img
-                    className="w-12 h-12"
-                    src={booking?.packageDetails?.packageImages[0]}
-                    alt="Package Image"
-                  />
-                </Link>
-                <Link to={`/package/${booking?.packageDetails?._id}`}>
-                  <p className="hover:underline">
-                    {booking?.packageDetails?.packageName}
-                  </p>
-                </Link>
-                <p>{booking?.buyer?.username}</p>
-                <p>{booking?.buyer?.email}</p>
-                <p>{booking?.date}</p>
-                <button
-                  onClick={() => {
-                    handleCancel(booking._id);
-                  }}
-                  className="p-2 rounded bg-red-600 text-white hover:opacity-95"
-                >
-                  Cancel
-                </button>
-              </div>
-            );
-          })}
-      </div>
-    </div>
+     <Box display="flex" justifyContent="center" width="100%">
+         <Paper elevation={6} sx={{ width: "95%", p: 3, borderRadius: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+           {loading && <Typography variant="h6" align="center">Loading...</Typography>}
+           {error && <Typography variant="h6" align="center" color="error">{error}</Typography>}
+           <Box borderBottom={4} p={3}>
+             <TextField
+               fullWidth
+               label="Search Username or Email"
+               variant="outlined"
+               value={searchTerm}
+               onChange={(e) => setSearchTerm(e.target.value)}
+             />
+           </Box>
+           {currentBookings.map((booking, i) => (
+             <motion.div
+               key={i}
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               exit={{ opacity: 0, y: -20 }}
+               transition={{ duration: 0.5 }}
+               style={{
+                 display: "flex",
+                 alignItems: "center",
+                 justifyContent: "space-between",
+                 padding: "16px",
+                 borderBottom: "2px solid #ddd",
+               }}
+             >
+               <Link to={`/package/${booking?.packageDetails?._id}`}>
+                 <Avatar
+                   src={booking?.packageDetails?.packageImages[0]}
+                   alt="Package Image"
+                   sx={{ width: 48, height: 48, borderRadius: 1 }}
+                 />
+               </Link>
+               <Link to={`/package/${booking?.packageDetails?._id}`}>
+                 <Typography
+                   variant="body1"
+                   sx={{ textDecoration: "none", cursor: "pointer", "&:hover": { textDecoration: "underline" } }}
+                 >
+                   {booking?.packageDetails?.packageName}
+                 </Typography>
+               </Link>
+               <Typography>{booking?.buyer?.username}</Typography>
+               <Typography>{booking?.buyer?.email}</Typography>
+               <Typography>{booking?.date}</Typography>
+               <Button
+                 variant="contained"
+                 color="error"
+                 onClick={() => handleCancel(booking._id)}
+                 sx={{ textTransform: "none" }}
+               >
+                 Cancel
+               </Button>
+             </motion.div>
+           ))}
+         </Paper>
+       </Box>
   );
 };
 

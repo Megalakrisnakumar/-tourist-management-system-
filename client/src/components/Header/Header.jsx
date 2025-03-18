@@ -1,140 +1,98 @@
-import React, { useRef, useEffect, useContext } from 'react'
-// import { Container, Row, Button, ButtonDropdown } from 'reactstrap'
-import { Container, Row, Button} from 'reactstrap'
-import { NavLink, Link, useNavigate } from 'react-router-dom'
-// import logo from '../../assets/images/logo.png'
-import logo from '../../assets/images/horizon.png'
-import './header.css'
-import { AuthContext } from '../../context/AuthContext'
+import React, { useRef, useEffect, useContext, useState } from 'react';
+import { AppBar, Toolbar, Button, Typography, Menu, MenuItem, IconButton } from '@mui/material';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import { AuthContext } from '../../context/AuthContext';
+import logo from '../../assets/images/horizon.png';
+import './header.css';
+import { motion } from 'framer-motion';
 
-const nav_links = [
-  {
-    path: '/home',
-    display: 'Home',
-  },
-  // {
-  //   path: '/about',
-  //   display: 'About',
-  // },
-  {
-    path: '/tours',
-    display: 'Tours',
-  },
-  {
-    path:`/Dashboard`,
-    display:'Dashboard'
-  }
-]
-
-
-
+const navLinks = [
+  { path: '/home', display: 'Home' },
+  { path: '/tours', display: 'Tours' },
+  { path: '/packages', display: 'Packages' },
+  { path: '/Dashboard', display: 'Dashboard', adminOnly: true }
+];
 
 const Header = () => {
-
-
-  const headerRef = useRef(null)
+  const headerRef = useRef(null);
   const navigate = useNavigate();
-  const { user, dispatch } = useContext(AuthContext)
+  const { user, dispatch } = useContext(AuthContext);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const logout = () => {
-    dispatch({ type: 'LOGOUT' })
-    navigate("/")
-  }
-
-  
-
-
-  const stickyHeaderFunc = () => {
-    window.addEventListener('scroll', () => {
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        // headerRef.current.classList.add('sticky__header')
-      } else {
-        // headerRef.current.classList.remove('sticky__header')
-      }
-    })
-  }
-
- 
-  
+    dispatch({ type: 'LOGOUT' });
+    navigate('/');
+  };
 
   useEffect(() => {
-    stickyHeaderFunc()
-    return window.removeEventListener('scroll', stickyHeaderFunc)
-  })
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        headerRef.current.classList.add('sticky');
+      } else {
+        headerRef.current.classList.remove('sticky');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  console.log(user);
-  
-
-  return <header className='header' ref={headerRef}>
-    <Container>
-      <Row>
-        <div className='nav_wrapper d-flex align-items-center justify-content-between'>
-          {/*=============logo===========*/}
-          <div className='logo'>
-            <img src={logo} alt="" />
-          </div>
-          {/*=============logo end========== */}
-          {/*=============menu start===========*/}
-          <div className='navigation'>
-            <ul className='menu d-flex align-items-left gap-2 custom-menu'>
-                  <li className='nav__item' >
-                    <NavLink to={nav_links[0].path} className={navClass => navClass.isActive ? "active__link" : ""}>
-                      {nav_links[0].display}</NavLink>
-                  </li>
-                  <li className='nav__item' >
-                    <NavLink to={nav_links[1].path} className={navClass => navClass.isActive ? "active__link" : ""}>
-                      {nav_links[1].display}</NavLink>
-                  </li>
-
-                  {
-                    user?.role === 'admin' ?
-                  <li className='nav__item' >
-                    <NavLink to={nav_links[2].path} className={navClass => navClass.isActive ? "active__link" : ""}>
-                      {nav_links[2].display}</NavLink>
-                  </li> : null
-                  }
-              {/* {
-                nav_links.map((item, index) => (
-                  <li className='nav__item' key={index}>
-                    <NavLink to={item.path} className={navClass => navClass.isActive ? "active__link" : ""}>
-                      {item.display}</NavLink>
-                  </li>
-                ))} */}
-            </ul>
-          </div>
-
-          {/*=============menu end============= */}
-          <div className='nav_right d-flex align-items-center gap-4'>
-            <div className='nav__btns d-flex align-items-center gap-4'>
-
-              {
-                user ? (<>
-                  <h5 className="mb-0">{user.username}</h5>
-                  <Button className="btn btn-dark" onClick={logout}>Logout</Button>
-                </>) : (<>
-                  <Button className='btn secondary__btn'>
-                    <Link to='/login'>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button className='btn primary__btn'>
-                    <Link to='/register'>
-                      Register
-                    </Link>
-                  </Button>
-                </>
-                )
-              }
-
-            </div>
-            <span className='mobile__menu'>
-              <i class="ri-menu-line"> </i>
-            </span>
-          </div>
+  return (
+    <AppBar position="sticky" ref={headerRef} sx={{ bgcolor: 'white', boxShadow: 3 }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* Logo */}
+        <motion.div whileHover={{ scale: 1.1 }}>
+          <img src={logo} alt="Logo" style={{ height: '50px', cursor: 'pointer' }} onClick={() => navigate('/home')} />
+        </motion.div>
+        
+        {/* Navigation Links */}
+        <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
+          {navLinks.map((item, index) => (
+            (!item.adminOnly || (item.adminOnly && user?.role === 'admin')) && (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.1, color: '#1976d2' }}
+                transition={{ duration: 0.2 }}
+              >
+                <NavLink to={item.path} style={{ textDecoration: 'none', color: '#333', fontSize: '18px', fontWeight: 'bold' }}>
+                  {item.display}
+                </NavLink>
+              </motion.div>
+            )
+          ))}
         </div>
-      </Row>
-    </Container>
-  </header>
-}
 
-export default Header
+        {/* User Actions */}
+        <div>
+          {user ? (
+            <>
+              <Typography variant="h6"  sx={{ cursor: 'pointer', fontWeight: 'bold',bgcolor:"black" , padding:"10px",borderRadius:"5px",boxShadow: 3 ,opacity:"80%" }} onClick={(e) => setMenuAnchor(e.currentTarget)}>
+                {user.username}
+              </Typography>
+              <Menu
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={() => setMenuAnchor(null)}
+              >
+                <MenuItem onClick={() => navigate('/profile/user')}>Profile</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Button variant="contained"  component={Link} to="/login">Login</Button>
+              <Button variant="contained" component={Link} to="/register" sx={{ ml: 1 }}>Register</Button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Menu */}
+        <IconButton edge="end" color="inherit" sx={{ display: { xs: 'block', md: 'none' } }}>
+          <MenuIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+export default Header;

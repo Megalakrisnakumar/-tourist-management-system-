@@ -18,6 +18,8 @@ import PackageAdminDashboard from '../Admin/AdminDashboard'
 import UpdatePackage from '../Admin/UpdatePackage'
 import Package from '../packages/Package'
 import PackageBooking from '../packages/Booking'
+import Profile from '../pages/Profile'
+import AllPackages from '../Admin/AllPackages'
 
 
 
@@ -33,6 +35,7 @@ const Routers = () => {
     <Routes>
       <Route path='/' element={<Navigate to='/home' />} />
       <Route path='/home' element={<Home />} />
+      <Route path='/profile/user' element={<Profile />} />
       <Route path='/tours' element={<Tours />} />
       <Route path='/tours/:id' element={<TourDetails />} />
       <Route path='/book/:id' element={<AccBookingPage />} />
@@ -40,6 +43,7 @@ const Routers = () => {
       <Route path='/register' element={<Register />} />
       <Route path='/thank-you' element={<ThankYou />} />
       <Route path='/tours/search' element={<SearchResultList />} />
+      <Route path='/packages' element={<AllPackages />} />
 
 
       {/* admin routes */}
@@ -51,12 +55,7 @@ const Routers = () => {
       <Route path="/package/:id" element={<Package />} />
       <Route path="/booking/:id" element={<PackageBooking />} />
       
-      {/* PackageBooking */}
-      {/* AddPackages */}
-      <Route path='/test' element={<AddPackages />} />
-      <Route path='/test1' element={<PackageAdminDashboard />} />
-
-
+    
       {/* PackageAdminDashboard */}
       <Route path='/*' element={<UnauthorizedPage />} />
 

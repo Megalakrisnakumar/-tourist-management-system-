@@ -38,7 +38,7 @@ const PackageAdminDashboard = () => {
         </Toolbar>
       </AppBar> */}
       <Container sx={{ display: "flex", flexGrow: 1, mt: 2 }}>
-        <Paper sx={{ width: "30%", p: 3, textAlign: "center" }} elevation={5}>
+        {/* <Paper sx={{ width: "30%", p: 3, textAlign: "center" }} elevation={5}>
           <Box position="relative" display="inline-block">
             <Avatar
               src={profilePhoto ? URL.createObjectURL(profilePhoto) : currentUser.avatar}
@@ -74,7 +74,7 @@ const PackageAdminDashboard = () => {
               <Delete />
             </IconButton>
           </Box>
-        </Paper>
+        </Paper> */}
         <Box sx={{ flexGrow: 1, ml: 2 }}>
           <Tabs
             value={activePanelId}
@@ -86,8 +86,6 @@ const PackageAdminDashboard = () => {
             <StyledTab label="Bookings" value={1} />
             <StyledTab label="Add Packages" value={2} />
             <StyledTab label="All Packages" value={3} />
-            <StyledTab label="Users" value={4} />
-            <StyledTab label="Payments" value={5} />
             <StyledTab label="Ratings/Reviews" value={6} />
             <StyledTab label="History" value={7} />
           </Tabs>
