@@ -29,6 +29,7 @@ export const createPackage = async (req, res) => {
       packageDiscountPrice,
       packageOffer,
       packageImages,
+      
     } = req.body;
 
     if (

@@ -1,6 +1,17 @@
 import Booking from "../models/booking.model.js";
 import Package from "../models/package.model.js";
 import { ObjectId } from "mongodb";
+import { generateTouristPass } from "../utils/generatingpass.js";
+import  nodemailer from 'nodemailer';
+import User from "../models/User.js";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+// Define __dirname manually
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 
 //book package
 export const bookPackage = async (req, res) => {
@@ -34,6 +45,43 @@ export const bookPackage = async (req, res) => {
     }
 
     const newBooking = await Booking.create(req.body);
+    const user=await User.findById(newBooking.buyer)
+
+    
+  const imagePath = path.join(__dirname,"../"+ validPackage.packageImages[0].split("http://localhost:8000/")[1])
+  console.log(imagePath);
+  
+
+  const filePath=  await generateTouristPass(newBooking._id,user.username,validPackage.packageName,imagePath)
+  // packagename
+  
+
+// const userEmail= user.email
+
+   // Send Email with Attachment
+   const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,  // Replace with your email
+      pass: process.env.PASSWORD,  // Replace with your app password
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: "tcftech11@gmail.com",
+    subject: "Your Tourist Pass",
+    text: `Dear ${user.username},\n\nPlease find your Tourist Pass attached.\n\nEnjoy your trip!\n\nBest Regards,\nTourism Team`,
+    attachments: [
+      {
+        filename: `TouristPass_${newBooking._id}.pdf`,
+        path: filePath,
+      },
+    ],
+  };
+
+  await transporter.sendMail(mailOptions);
+
 
     if (newBooking) {
       return res.status(201).send({

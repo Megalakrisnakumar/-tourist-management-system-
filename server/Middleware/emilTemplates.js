@@ -26,7 +26,7 @@ export const bookingNotificationContent = (bookingDetails) => {
         <p style="font-size: 16px; color: #444;">If you have any questions or need to make changes to your booking, please contact us.</p>
         
         <div style="text-align: center; margin-top: 20px;">
-          <a href="${process.env.FRONTEND_URL}/booking/${_id}" style="display: inline-block; background-color: #4CAF50; color: #fff; font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 5px; border: 2px solid #4CAF50; transition: background-color 0.3s ease-in-out;">
+          <a href="${"http://localhost:3000"}/booking/${_id}" style="display: inline-block; background-color: #4CAF50; color: #fff; font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 5px; border: 2px solid #4CAF50; transition: background-color 0.3s ease-in-out;">
             View Booking Details
           </a>
         </div>

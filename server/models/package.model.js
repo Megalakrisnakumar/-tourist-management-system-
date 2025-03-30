@@ -10,6 +10,9 @@ const packageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    fromplace: {
+      type: String,
+    },
     packageDestination: {
       type: String,
       required: true,
@@ -29,6 +32,12 @@ const packageSchema = new mongoose.Schema(
     packageTransportation: {
       type: String,
       required: true,
+    },
+    localTransportation: {
+      type: String,
+    },
+    distance:{
+      type: String,
     },
     packageMeals: {
       type: String,
