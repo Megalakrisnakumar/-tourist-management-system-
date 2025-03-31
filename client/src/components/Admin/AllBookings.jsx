@@ -18,7 +18,7 @@ const AllBookings = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        `http://localhost:8000/api/package/booking/get-currentBookings?searchTerm=${searchTerm}`
+        `http://localhost:8000/api/package/booking/get-allBookings`
       );
       const data = await res.json();
       if (data?.success) {
