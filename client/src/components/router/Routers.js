@@ -22,6 +22,7 @@ import Profile from '../pages/Profile'
 import AllPackages from '../Admin/AllPackages'
 import Packages from '../pages/Packeges'
 import Search from '../pages/search'
+import MyBookingPage from '../Booking/mybooking'
 // import { Search } from '@mui/icons-material'
 
 
@@ -42,6 +43,7 @@ const Routers = () => {
       <Route path='/tours' element={<Tours />} />
       <Route path='/tours/:id' element={<TourDetails />} />
       <Route path='/book/:id' element={<AccBookingPage />} />
+      <Route path='/mytourbookings' element={<MyBookingPage/>} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/thank-you' element={<ThankYou />} />
