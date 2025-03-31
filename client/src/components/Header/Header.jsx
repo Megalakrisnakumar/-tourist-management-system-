@@ -76,6 +76,7 @@ const Header = () => {
               >
                 <MenuItem onClick={() => navigate('/profile/user')}>Profile</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
+                <MenuItem onClick={() => navigate('/mytourbookings')}>My TourBookings</MenuItem>
               </Menu>
             </>
           ) : (

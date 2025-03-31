@@ -71,7 +71,6 @@ app.use("/api/v1/review" , reviewRoute);
 app.use("/api/v1/booking" , bookingRoute);
 app.use("/api/v1/accomondation" , accoRoute);
 app.get("/dashboard",GetAllDashbard);
-
 app.use("/api/package", packageRoute);
 app.use("/api/package/booking", packagebookingRoute);
 app.use("/api/package/rating", packageratingRoute);

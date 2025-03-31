@@ -25,6 +25,8 @@ export const verifyUser = (req, res, next) => {
 
     verifyToken(req, res, next, () => {
        
+        console.log( req.user);
+        
         if (req.user.id === req.params.id || req.user.role === "user") {   //some changes here as well
             next();
         } else {
