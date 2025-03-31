@@ -69,7 +69,7 @@ export const bookPackage = async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL,
-    to: "tcftech11@gmail.com",
+    to: user.email,
     subject: "Your Tourist Pass",
     text: `Dear ${user.username},\n\nPlease find your Tourist Pass attached.\n\nEnjoy your trip!\n\nBest Regards,\nTourism Team`,
     attachments: [
@@ -158,6 +158,9 @@ export const getAllBookings = async (req, res) => {
         },
       })
       .sort({ createdAt: "asc" });
+      
+      console.log(bookings);
+      
     let bookingsFilterd = [];
     bookings.map((booking) => {
       if (booking.buyer !== null) {
