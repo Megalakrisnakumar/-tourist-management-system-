@@ -2,6 +2,7 @@ import { Rating, Card, CardMedia, CardContent, Typography, Box } from "@mui/mate
 import React from "react";
 import { FaClock } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import AnimatedBadge from "../specialofferbadge/badge";
 
 const PackageCard = ({ packageData }) => {
   return (
@@ -55,6 +56,7 @@ const PackageCard = ({ packageData }) => {
               </Typography>
             </Box>
           )}
+
           {/* Price & Rating */}
           <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
             {packageData.packageTotalRatings > 0 && (
@@ -82,6 +84,12 @@ const PackageCard = ({ packageData }) => {
                 ${packageData.packagePrice}
               </Typography>
             )}
+
+                 {
+                  packageData.packageOffer?<AnimatedBadge/>:null
+                 } 
+
+
           </Box>
         </CardContent>
       </Card>
