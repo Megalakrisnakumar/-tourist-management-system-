@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import useFetch from '../../hooks/useFetch';
 import { BASE_URL } from '../../utils/config';
 import { Link, useNavigate } from 'react-router-dom';
+import AnimatedBadge from '../specialofferbadge/badge';
 
 const AccommodationCard = ({ accommodation }) => {
   const location = accommodation.location;
@@ -60,8 +61,10 @@ const AccommodationCard = ({ accommodation }) => {
               Go to Map
             </Button>
           </Box>
+    
         </CardContent>
       </Card>
+     
     </motion.div>
   );
 };

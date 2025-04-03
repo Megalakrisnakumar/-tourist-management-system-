@@ -10,6 +10,8 @@ import { motion } from 'framer-motion';
 const navLinks = [
   { path: '/home', display: 'Home' },
   { path: '/tours', display: 'Tours' },
+  { path: '/accommodations', display: 'Accommodations' },
+ 
   { path: '/packages', display: 'Packages' },
   { path: '/Dashboard', display: 'Dashboard', adminOnly: true }
 ];
