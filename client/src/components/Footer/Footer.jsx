@@ -4,6 +4,7 @@ import { Container, Row , Col, ListGroup , ListGroupItem } from 'reactstrap'
 import { Link } from 'react-router-dom'
 // import logo from '../../assets/images/logo.png'
 import logo from '../../assets/images/horizon.png'
+import Chatbot from '../chatbot/chat'
 
 
 const quick__links = [
@@ -112,6 +113,7 @@ const Footer = () => {
           <Col lg='12' className='text-center pt-5'>
             <p className='copyright'>Copyright {year} , 
              All rights reserved.</p>
+             <Chatbot/> 
           </Col>
         </Row>
       </Container>
