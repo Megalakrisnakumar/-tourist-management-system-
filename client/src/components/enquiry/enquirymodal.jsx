@@ -14,9 +14,9 @@ import axios from "axios";
 const modalStyle = {
   position: "absolute",
   top: "10%", // Positioned near the top
-  left: "50%",
+  left: "40%",
   transform: "translateX(-50%)", // Only horizontal centering
-  width: 400,
+  width: 500,
   bgcolor: "background.paper",
   borderRadius: 4,
   boxShadow: 24,
@@ -65,6 +65,8 @@ export default function EnquiryFormModal({ open, onClose }) {
     onClose();
   };
 
+  // style={{width:"400px"}}
+
   return (
     <Modal
       open={open}
@@ -84,7 +86,7 @@ export default function EnquiryFormModal({ open, onClose }) {
           <Typography variant="h5" gutterBottom textAlign="center">
             Tour Enquiry
           </Typography>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <TextField
               name="name"
               label="Your Name"
