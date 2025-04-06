@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 import logo from '../../assets/images/horizon.png';
 import './header.css';
 import { motion } from 'framer-motion';
+import EnquiryFormModal from '../enquiry/enquirymodal';
 
 const navLinks = [
   { path: '/home', display: 'Home' },
@@ -19,6 +20,7 @@ const navLinks = [
 const Header = () => {
   const headerRef = useRef(null);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const { user, dispatch } = useContext(AuthContext);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
@@ -43,10 +45,14 @@ const Header = () => {
     <AppBar position="sticky" ref={headerRef} sx={{ bgcolor: 'white', boxShadow: 3 }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {/* Logo */}
+        
+            <EnquiryFormModal open={open} onClose={() => setOpen(false)} />
         <motion.div whileHover={{ scale: 1.1 }}>
           <img src={logo} alt="Logo" style={{ height: '50px', cursor: 'pointer' }} onClick={() => navigate('/home')} />
         </motion.div>
-        
+        <Button variant="contained" color='error' onClick={() => setOpen(true)}>
+              Open Enquiry Form
+            </Button>
         {/* Navigation Links */}
         <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
           {navLinks.map((item, index) => (

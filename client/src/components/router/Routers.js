@@ -27,6 +27,7 @@ import Accommodations from '../Accomondation/Accomondations'
 import CustomizeTourForm from '../customizeTour/customizeform'
 import CustomTourBookingTable from '../customizeTour/bookings/customerbooking'
 import MyCustomizeBookings from '../customizeTour/user/mybookings'
+import EnquiryTable from '../enquiry/enquirylist'
 // import { Search } from '@mui/icons-material'
 
 
@@ -72,7 +73,7 @@ const Routers = () => {
       {/* PackageAdminDashboard */}
       {/* CustomizeTourForm */}
       <Route path="/customizedTourbookings" element={<CustomizeTourForm />} />
-      <Route path="/test1" element={<CustomTourBookingTable />} />
+      <Route path="/test1" element={<EnquiryTable />} />
       
       
       <Route path='/*' element={<UnauthorizedPage />} />

@@ -11,7 +11,7 @@ import bookingRoute from './routes/bookings.js'
 
 import accoRoute from "./routes/accomondations.js"
 import { GetAllDashbard } from './controllers/dashboard.js'
-
+import enquiryRoutes from './routes/enquiry.route.js'
 import packageRoute from "./routes/package.route.js";
 import packagebookingRoute from "./routes/booking.route.js";
 import packageratingRoute from "./routes/rating.route.js";
@@ -78,6 +78,7 @@ app.use("/api/package/booking", packagebookingRoute);
 app.use("/api/package/rating", packageratingRoute);
 app.use('/api/customize-tour-bookings', customizeTourBookingRoutes);
 app.post("/api/send-confirm-email",sendConfirmMail)
+app.use("/api/",enquiryRoutes)
 
 
 
