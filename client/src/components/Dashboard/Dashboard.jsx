@@ -10,6 +10,7 @@ import AccommodationTable from "../Accomondation/AccomondatinTable";
 import BookingsAccomondationTable from "../Accomondation/BookingsAccomondationTable";
 import AddAccommodation from "../Accomondation/AddAccomondation";
 import PackageAdminDashboard from "../Admin/AdminDashboard";
+import CustomTourBookingTable from "../customizeTour/bookings/customerbooking";
 
 const menuItems = [
   { text: "Dashboard", icon: <Home />, key: "dashboard" },
@@ -20,6 +21,7 @@ const menuItems = [
   { text: "Accommodation Bookings", icon: <Book />, key: "BookingsAccomondationlist" },
   { text: "Add Accommodation", icon: <Add />, key: "AddAccommodation" },
   { text: "Packages", icon: <CardTravel />, key: "Packages" },
+  { text: "CustomTour Bookings", icon: <Home />, key: "customizedTourbookings" },
 ];
 
 export default function Dashboard() {
@@ -84,6 +86,7 @@ export default function Dashboard() {
         {options === "BookingsAccomondationlist" && <BookingsAccomondationTable />}
         {options === "AddAccommodation" && <AddAccommodation />}
         {options === "Packages" && <PackageAdminDashboard />}
+        {options === "customizedTourbookings" && <CustomTourBookingTable />}
       </div>
     </div>
   );
