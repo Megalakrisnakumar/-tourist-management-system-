@@ -16,6 +16,8 @@ import packageRoute from "./routes/package.route.js";
 import packagebookingRoute from "./routes/booking.route.js";
 import packageratingRoute from "./routes/rating.route.js";
 import upload from './Middleware/fileupload.js'
+import customizeTourBookingRoutes  from'./routes/customizeTourBookingRoutes.js';
+import { sendConfirmMail } from './controllers/customizeTourBookingController.js'
 
 
 
@@ -74,6 +76,8 @@ app.get("/dashboard",GetAllDashbard);
 app.use("/api/package", packageRoute);
 app.use("/api/package/booking", packagebookingRoute);
 app.use("/api/package/rating", packageratingRoute);
+app.use('/api/customize-tour-bookings', customizeTourBookingRoutes);
+app.post("/api/send-confirm-email",sendConfirmMail)
 
 
 

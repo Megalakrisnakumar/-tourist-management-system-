@@ -24,6 +24,9 @@ import Packages from '../pages/Packeges'
 import Search from '../pages/search'
 import MyBookingPage from '../Booking/mybooking'
 import Accommodations from '../Accomondation/Accomondations'
+import CustomizeTourForm from '../customizeTour/customizeform'
+import CustomTourBookingTable from '../customizeTour/bookings/customerbooking'
+import MyCustomizeBookings from '../customizeTour/user/mybookings'
 // import { Search } from '@mui/icons-material'
 
 
@@ -45,6 +48,7 @@ const Routers = () => {
       <Route path='/tours/:id' element={<TourDetails />} />
       <Route path='/book/:id' element={<AccBookingPage />} />
       <Route path='/mytourbookings' element={<MyBookingPage/>} />
+      <Route path='/myCustomizeTourBookings' element={<MyCustomizeBookings/>} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/thank-you' element={<ThankYou />} />
@@ -66,6 +70,11 @@ const Routers = () => {
       
     
       {/* PackageAdminDashboard */}
+      {/* CustomizeTourForm */}
+      <Route path="/customizedTourbookings" element={<CustomizeTourForm />} />
+      <Route path="/test1" element={<CustomTourBookingTable />} />
+      
+      
       <Route path='/*' element={<UnauthorizedPage />} />
 
     </Routes>

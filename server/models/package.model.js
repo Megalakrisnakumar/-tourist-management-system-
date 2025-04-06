@@ -49,7 +49,7 @@ const packageSchema = new mongoose.Schema(
     },
     packagePrice: {
       type: Number,
-      required: true,
+      
     },
     packageDiscountPrice: {
       type: Number,
@@ -57,7 +57,6 @@ const packageSchema = new mongoose.Schema(
     },
     packageOffer: {
       type: Boolean,
-      required: true,
     },
     packageRating: {
       type: Number,

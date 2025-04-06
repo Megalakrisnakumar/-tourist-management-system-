@@ -11,7 +11,7 @@ const navLinks = [
   { path: '/home', display: 'Home' },
   { path: '/tours', display: 'Tours' },
   { path: '/accommodations', display: 'Accommodations' },
- 
+  { path: '/customizedTourbookings', display: 'customized Tour bookings' },
   { path: '/packages', display: 'Packages' },
   { path: '/Dashboard', display: 'Dashboard', adminOnly: true }
 ];
@@ -79,6 +79,7 @@ const Header = () => {
                 <MenuItem onClick={() => navigate('/profile/user')}>Profile</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
                 <MenuItem onClick={() => navigate('/mytourbookings')}>My TourBookings</MenuItem>
+                <MenuItem onClick={() => navigate('/myCustomizeTourBookings')}>My Customize TourBookings</MenuItem>
               </Menu>
             </>
           ) : (
