@@ -7,6 +7,7 @@ import logo from '../../assets/images/horizon.png';
 import './header.css';
 import { motion } from 'framer-motion';
 import EnquiryFormModal from '../enquiry/enquirymodal';
+import AnimatedWrapper from '../animation/Animation';
 
 const navLinks = [
   { path: '/home', display: 'Home' },
@@ -50,9 +51,14 @@ const Header = () => {
         <motion.div whileHover={{ scale: 1.1 }}>
           <img src={logo} alt="Logo" style={{ height: '50px', cursor: 'pointer' }} onClick={() => navigate('/home')} />
         </motion.div>
+
+        <AnimatedWrapper>
+
         <Button variant="contained" color='error' onClick={() => setOpen(true)}>
               Open Enquiry Form
             </Button>
+        </AnimatedWrapper>
+
         {/* Navigation Links */}
         <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
           {navLinks.map((item, index) => (

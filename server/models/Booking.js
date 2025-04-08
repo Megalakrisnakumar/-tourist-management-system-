@@ -34,7 +34,6 @@ const bookingSchema = new mongoose.Schema(
     },
     localtransport: {
       type: String,
-
     },
     fullName: {
       type: String,
