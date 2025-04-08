@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import {
   TextField, Button, MenuItem, Select, InputLabel, FormControl,
-  OutlinedInput, Checkbox, ListItemText
+  OutlinedInput, Checkbox, ListItemText, FormHelperText
 } from '@mui/material';
 import tours from '../../assets/data/tours';
-
-
 
 
 const indianDestinations = [
@@ -51,22 +49,45 @@ const activitiesList = [
   'Adventure Sports'
 ];
 
+
 const Step1 = ({ onNext }) => {
   const [tourData, setTourData] = useState({
-    title: '',
     destination: '',
     startDate: '',
     endDate: '',
     activities: [],
   });
 
+  const [errors, setErrors] = useState({});
+
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTourData({ ...tourData, [name]: value });
+    setErrors({ ...errors, [name]: '' }); // clear error on change
   };
 
-  console.log(tours);
-  
+  const handleNext = () => {
+    const newErrors = {};
+
+    if (!tourData.destination) newErrors.destination = 'Destination is required';
+    if (!tourData.startDate) newErrors.startDate = 'Start date is required';
+    if (!tourData.endDate) newErrors.endDate = 'End date is required';
+
+    if (tourData.startDate && tourData.startDate < today)
+      newErrors.startDate = 'Start date cannot be in the past';
+    if (tourData.endDate && tourData.endDate < today)
+      newErrors.endDate = 'End date cannot be in the past';
+    if (tourData.startDate && tourData.endDate && tourData.endDate < tourData.startDate)
+      newErrors.endDate = 'End date cannot be before start date';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      onNext({ tourDetails: tourData });
+    }
+  };
 
   return (
     <div>
@@ -75,16 +96,19 @@ const Step1 = ({ onNext }) => {
         <h2 style={{ textAlign: "center" }} className="text-2xl font-bold ">Step 1: Tour Details</h2>
       </div>
 
-      <div   style={{ display: "flex", justifyContent: "space-between", marginTop: "20px",gap:"20px"}}> 
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px", gap: "20px" }}>
         <div>
-      <img src={tours[3].photo} alt=""  style={{ borderRadius:"20px" }}  />
+          <img src={tours[3].photo} alt="" style={{ borderRadius: "20px" }} />
         </div>
-        <div style={{ width: "100%", borderRadius: "10px", backgroundColor: "lightblue", display: "flex", flexDirection: "column", gap: "20px", padding: "80px" }}>
-          <div className="space-y-4 mt-4 " style={{display:"flex",flexDirection:"column",gap:"30px"}} >
-            <TextField fullWidth label="Tour Title" name="title" onChange={handleChange} />
+
+        <div style={{
+          width: "100%", borderRadius: "10px", backgroundColor: "lightblue",
+          display: "flex", flexDirection: "column", gap: "20px", padding: "80px"
+        }}>
+          <div className="space-y-4 mt-4" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
 
             {/* Destination Dropdown */}
-            <FormControl fullWidth>
+            <FormControl fullWidth error={!!errors.destination}>
               <InputLabel id="destination-label">Destination</InputLabel>
               <Select
                 labelId="destination-label"
@@ -99,20 +123,44 @@ const Step1 = ({ onNext }) => {
                   </MenuItem>
                 ))}
               </Select>
+              {errors.destination && <FormHelperText>{errors.destination}</FormHelperText>}
             </FormControl>
 
-            <TextField fullWidth type="date" label="Start Date" name="startDate" InputLabelProps={{ shrink: true }} onChange={handleChange} />
-            <TextField fullWidth type="date" label="End Date" name="endDate" InputLabelProps={{ shrink: true }} onChange={handleChange} />
+            <TextField
+              fullWidth
+              type="date"
+              label="Start Date"
+              name="startDate"
+              InputLabelProps={{ shrink: true }}
+              onChange={handleChange}
+              value={tourData.startDate}
+              error={!!errors.startDate}
+              helperText={errors.startDate}
+              inputProps={{ min: today }}
+            />
+
+            <TextField
+              fullWidth
+              type="date"
+              label="End Date"
+              name="endDate"
+              InputLabelProps={{ shrink: true }}
+              onChange={handleChange}
+              value={tourData.endDate}
+              error={!!errors.endDate}
+              helperText={errors.endDate}
+              inputProps={{ min: today }}
+            />
 
             <FormControl fullWidth>
-              <InputLabel id="activities-label">Activities</InputLabel>
+              <InputLabel id="activities-label">Activities (Optional)</InputLabel>
               <Select
                 labelId="activities-label"
                 multiple
                 name="activities"
                 value={tourData.activities}
                 onChange={handleChange}
-                input={<OutlinedInput label="Activities" />}
+                input={<OutlinedInput label="Activities (Optional)" />}
                 renderValue={(selected) => selected.join(', ')}
               >
                 {activitiesList.map((activity) => (
@@ -124,16 +172,22 @@ const Step1 = ({ onNext }) => {
               </Select>
             </FormControl>
 
-            <Button variant="contained" onClick={() => onNext({ tourDetails: tourData })}>
+            <Button variant="contained" onClick={handleNext}>
               Next
             </Button>
+
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };
 
 export default Step1;
+
+
+
+
+
+
+

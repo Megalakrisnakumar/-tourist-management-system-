@@ -86,3 +86,8 @@ await sendConfirmEmailCustomized(user.email, booking);
     res.status(500).json({ message: 'Error creating customized tour booking', error });
   }
 };
+
+
+
+// value first input console
+

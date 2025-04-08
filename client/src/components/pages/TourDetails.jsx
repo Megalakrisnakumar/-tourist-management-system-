@@ -10,6 +10,7 @@ import { BASE_URL } from '../../utils/config.js';
 import { AuthContext } from '../../context/AuthContext.js';
 import MapComponent from '../map/map.jsx';
 import { motion } from 'framer-motion';
+import GoogleMap from '../map/googlemap.jsx';
 
 const TourDetails = () => {
 
@@ -53,6 +54,11 @@ const TourDetails = () => {
       alert(err.message);
     }
   };
+
+
+
+
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -126,7 +132,8 @@ const TourDetails = () => {
               </List>
             </Box>
 
-            <MapComponent />
+            {/* <MapComponent /> */}
+            <GoogleMap place={address}  />
           </Grid>
 
           <Grid item xs={12} md={4}>
