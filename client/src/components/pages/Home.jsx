@@ -11,6 +11,7 @@ import Testimonials from '../Testimonial/Testimonials';
 import Newsletter from '../../shared/Newsletter';
 import Accommodations from '../Accomondation/Accomondations';
 import MapPage from './mappage';
+import Googlemap2 from '../map/googlemap2';
 
 const Home = () => {
   return (
@@ -70,7 +71,8 @@ const Home = () => {
         </Container>
       </section>
 
-      <MapPage />
+      {/* <MapPage /> */}
+      <Googlemap2/>
       <Newsletter />
     </>
   );
