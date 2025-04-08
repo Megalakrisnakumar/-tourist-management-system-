@@ -56,10 +56,7 @@ const Routers = () => {
       <Route path='/tours/search' element={<SearchResultList />} />
       <Route path='/packages' element={<Packages />} />
       <Route path='/accommodations' element={ <Accommodations />} />
-      
       <Route path="/search" element={<Search />} />
-
-
       {/* admin routes */}
       <Route path='/admin/register' element={<AdminRegister />} />
       {
@@ -68,14 +65,11 @@ const Routers = () => {
       <Route path="admin/update-package/:id" element={<UpdatePackage />} />
       <Route path="/package/:id" element={<Package />} />
       <Route path="/booking/:id" element={<PackageBooking />} />
-      
-    
       {/* PackageAdminDashboard */}
       {/* CustomizeTourForm */}
       <Route path="/customizedTourbookings" element={<CustomizeTourForm />} />
       <Route path="/test1" element={<EnquiryTable />} />
-      
-      
+    
       <Route path='/*' element={<UnauthorizedPage />} />
 
     </Routes>
