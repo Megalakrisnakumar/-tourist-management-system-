@@ -28,17 +28,29 @@ const PaymentForm = ({ data, onBack, onSubmit }) => {
     const newErrors = {};
     if (cardNumber.length < 16) newErrors.cardNumber = 'Card number must be 16 digits';
     if (!/^\d{3,4}$/.test(cvv)) newErrors.cvv = 'Invalid CVV';
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) newErrors.expiry = 'Invalid expiry format MM/YY';
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+      newErrors.expiry = 'Invalid expiry format MM/YY';
+    } else {
+      const [inputMonth, inputYear] = expiry.split('/');
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear() % 100;
+
+      const expMonth = parseInt(inputMonth, 10);
+      const expYear = parseInt(inputYear, 10);
+
+      if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+        newErrors.expiry = 'Card expired';
+      }
+    }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       console.log(data);
-      data.paymentStatus="Completed"
-      
+      data.paymentStatus = "Completed";
       onSubmit(data);
       alert('Payment Submitted Successfully!');
-      
     }
   };
 
@@ -51,6 +63,16 @@ const PaymentForm = ({ data, onBack, onSubmit }) => {
       default:
         return <FaCreditCard size={30} color="#888" />;
     }
+  };
+
+  const handleExpiryChange = (e) => {
+    let value = e.target.value.replace(/[^\d]/g, '');
+
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
+
+    setExpiry(value.slice(0, 5));
   };
 
   return (
@@ -93,10 +115,11 @@ const PaymentForm = ({ data, onBack, onSubmit }) => {
               fullWidth
               label="Expiry Date"
               value={expiry}
-              onChange={(e) => setExpiry(e.target.value)}
+              onChange={handleExpiryChange}
               error={!!errors.expiry}
               helperText={errors.expiry}
               placeholder="MM/YY"
+              inputProps={{ maxLength: 5 }}
             />
           </Grid>
         </Grid>
