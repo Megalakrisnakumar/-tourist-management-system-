@@ -26,13 +26,9 @@ const Step3 = ({ onNext, onBack }) => {
     if (!transportData.transportType) newErrors.transportType = 'Transport Type is required';
     if (!transportData.pickupLocation) newErrors.pickupLocation = 'Pickup Location is required';
     if (!transportData.dropLocation) newErrors.dropLocation = 'Drop Location is required';
-    if (!transportData.preferredTime) {
-      newErrors.preferredTime = 'Preferred Time is required';
-    } else if (!timePattern.test(transportData.preferredTime)) {
-      newErrors.preferredTime = 'Time must be in HH:MM 24-hour format';
-    }
+   
     if (!transportData.localTransport) newErrors.localTransport = 'Local Transport is required';
-    if (!transportData.localPickup) newErrors.localPickup = 'Local Pickup Location is required';
+    
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -96,17 +92,7 @@ const Step3 = ({ onNext, onBack }) => {
               error={!!errors.dropLocation}
               helperText={errors.dropLocation}
             />
-            <TextField
-              fullWidth
-              type="time"
-              label="Preferred Time"
-              name="preferredTime"
-              value={transportData.preferredTime}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              error={!!errors.preferredTime}
-              helperText={errors.preferredTime}
-            />
+          
 
             <FormControl fullWidth error={!!errors.localTransport}>
               <InputLabel id="local-transport-label">Local Transportation</InputLabel>
@@ -123,15 +109,7 @@ const Step3 = ({ onNext, onBack }) => {
               {errors.localTransport && <FormHelperText>{errors.localTransport}</FormHelperText>}
             </FormControl>
 
-            <TextField
-              fullWidth
-              label="Local Pickup Location"
-              name="localPickup"
-              value={transportData.localPickup}
-              onChange={handleChange}
-              error={!!errors.localPickup}
-              helperText={errors.localPickup}
-            />
+          
 
             <div className="flex justify-between" style={{ display: "flex", gap: "20px" }}>
               <Button variant="outlined" onClick={onBack}>Back</Button>
