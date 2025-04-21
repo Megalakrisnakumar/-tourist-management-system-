@@ -90,7 +90,9 @@ const Header = () => {
               >
                 <MenuItem onClick={() => navigate('/profile/user')}>Profile</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
+                
                 <MenuItem onClick={() => navigate('/mytourbookings')}>My TourBookings</MenuItem>
+                <MenuItem onClick={() => navigate('/MyAccommodationBooking')}>My Accommodation Booking</MenuItem>
                 <MenuItem onClick={() => navigate('/myCustomizeTourBookings')}>My Customize TourBookings</MenuItem>
               </Menu>
             </>
