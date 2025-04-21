@@ -29,6 +29,7 @@ import CustomTourBookingTable from '../customizeTour/bookings/customerbooking'
 import MyCustomizeBookings from '../customizeTour/user/mybookings'
 import EnquiryTable from '../enquiry/enquirylist'
 import DistanceMatrix from '../map/DistanceCalculator'
+import MyAccommodationBooking from '../Accomondation/MyAccomondationsBooking'
 // import { Search } from '@mui/icons-material'
 
 
@@ -72,6 +73,9 @@ const Routers = () => {
       {/* CustomizeTourForm */}
       <Route path="/customizedTourbookings" element={<CustomizeTourForm />} />
       <Route path="/test1" element={<EnquiryTable />} />
+      <Route path="/MyAccommodationBooking" element={<MyAccommodationBooking />} />
+
+      
     
       <Route path='/*' element={<UnauthorizedPage />} />
 

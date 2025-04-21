@@ -41,8 +41,18 @@ const Booking = ({ tour, avgRating }) => {
     if (!booking.phone.trim()) errors.phone = "Phone is required";
     else if (!phoneRegex.test(booking.phone)) errors.phone = "Phone must be 10 digits";
 
-    if (!booking.bookAt) errors.bookAt = "Date is required";
-    else if (new Date(booking.bookAt) < new Date()) errors.bookAt = "Date must be in the future";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to 00:00:00 for accurate date-only comparison
+    
+    const selectedDate = new Date(booking.bookAt);
+    selectedDate.setHours(0, 0, 0, 0); // Normalize selected date
+    
+    if (!booking.bookAt) {
+      errors.bookAt = "Date is required";
+    } else if (selectedDate < today) {
+      errors.bookAt = "Date must be today or in the future";
+    }
+    
 
     if (!booking.guestSize || booking.guestSize < 1) errors.guestSize = "Guest size must be at least 1";
     if (!fromPlace.trim()) errors.fromPlace = "Starting location is required";
