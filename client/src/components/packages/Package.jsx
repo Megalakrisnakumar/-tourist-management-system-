@@ -19,6 +19,7 @@ import {  Button, Typography, Card, CardContent, IconButton, Snackbar } from "@m
 
 import RatingCard from "./RatingCard";
 import MuiCarousel from "./Carousel";
+import PackageActivitiesView from "./packageActivityView";
 
 const Package = () => {
   // SwiperCore.use([Navigation]);
@@ -208,13 +209,13 @@ const Package = () => {
                 <Typography variant="h5">
                   {packageData.packageOffer ? (
                     <>
-                      <span style={{ textDecoration: "line-through", color: "gray" }}>${packageData.packagePrice}</span> - ${packageData.packageDiscountPrice}
+                      <span style={{ textDecoration: "line-through", color: "gray" }}>₹{packageData.packagePrice}</span> - ₹{packageData.packageDiscountPrice}
                       <span style={{ backgroundColor: "green", color: "white", padding: "5px", borderRadius: "5px", marginLeft: "10px" }}>
                         {Math.floor(((+packageData.packagePrice - +packageData.packageDiscountPrice) / +packageData.packagePrice) * 100)}% Off
                       </span>
                     </>
                   ) : (
-                    <span>${packageData.packagePrice}</span>
+                    <span>₹{packageData.packagePrice}</span>
                   )}
                 </Typography>
                 <Typography color="success.main"><FaMapMarkerAlt /> {packageData.packageDestination}</Typography>
@@ -235,7 +236,8 @@ const Package = () => {
                 <Typography variant="h6">Accommodation:</Typography>
                 <Typography>{packageData.packageAccommodation}</Typography>
                 <Typography variant="h6">Activities:</Typography>
-                <Typography>{packageData.packageActivities}</Typography>
+                {/* <Typography>{packageData.packageActivities}</Typography> */}
+                <PackageActivitiesView packageData={packageData} />
                 <Typography variant="h6">Meals:</Typography>
                 <Typography>{packageData.packageMeals}</Typography>
                 <Typography variant="h6">Transportation:</Typography>
