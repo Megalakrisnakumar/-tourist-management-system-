@@ -70,6 +70,8 @@ const PackageCard = ({ packageData }) => {
                 <Typography variant="body2">({packageData.packageTotalRatings})</Typography>
               </Box>
             )}
+
+            
             {packageData.offer && packageData.packageDiscountPrice ? (
               <Box display="flex" gap={1} alignItems="center">
                 <Typography variant="body2" color="text.secondary" sx={{ textDecoration: "line-through" }}>

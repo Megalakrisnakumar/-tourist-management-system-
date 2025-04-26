@@ -22,10 +22,10 @@ const MyBookingPage = () => {
     doc.text(`Tour Name: ${booking.tourName}`, 20, 30);
     doc.text(`Distance: ${booking.distance} km`, 20, 40);
     doc.text(`Transport: ${booking.transport}`, 20, 50);
-    doc.text(`Accommodation: ${booking.accommodation}`, 20, 60);
-    doc.text(`Food: ${booking.food}`, 20, 70);
+    // doc.text(`Accommodation: ${booking.accommodation}`, 20, 60);
+    // doc.text(`Food: ${booking.food}`, 20, 70);
     doc.text(`Local Transport: ${booking.localtransport}`, 20, 80);
-    doc.text(`Guide Included: ${booking.guide === "true" ? "Yes" : "No"}`, 20, 90);
+    // doc.text(`Guide Included: ${booking.guide === "true" ? "Yes" : "No"}`, 20, 90);
     doc.text(`Guest Size: ${booking.guestSize}`, 20, 100);
     doc.text(`Phone: ${booking.phone}`, 20, 110);
     doc.text(`Total Price: ₹${booking.TotalPrice}`, 20, 120);
@@ -53,10 +53,10 @@ const MyBookingPage = () => {
             <Grid item xs={12} sm={6}><Detail title="Tour Name" value={booking.tourName} /></Grid>
             <Grid item xs={12} sm={6}><Detail title="Distance" value={`${booking.distance} km`} /></Grid>
             <Grid item xs={12} sm={6}><Detail title="Transport" value={booking.transport} /></Grid>
-            <Grid item xs={12} sm={6}><Detail title="Accommodation" value={booking.accommodation} /></Grid>
-            <Grid item xs={12} sm={6}><Detail title="Food" value={booking.food} /></Grid>
+            {/* <Grid item xs={12} sm={6}><Detail title="Accommodation" value={booking.accommodation} /></Grid> */}
+            {/* <Grid item xs={12} sm={6}><Detail title="Food" value={booking.food} /></Grid> */}
             <Grid item xs={12} sm={6}><Detail title="Local Transport" value={booking.localtransport} /></Grid>
-            <Grid item xs={12} sm={6}><Detail title="Guide Included" value={booking.guide === "true" ? "Yes" : "No"} /></Grid>
+            {/* <Grid item xs={12} sm={6}><Detail title="Guide Included" value={booking.guide === "true" ? "Yes" : "No"} /></Grid> */}
             <Grid item xs={12} sm={6}><Detail title="Guest Size" value={booking.guestSize} /></Grid>
             <Grid item xs={12} sm={6}><Detail title="Phone" value={booking.phone} /></Grid>
             <Grid item xs={12} sm={6}><Detail title="Total Price" value={`₹${booking.TotalPrice}`} /></Grid>

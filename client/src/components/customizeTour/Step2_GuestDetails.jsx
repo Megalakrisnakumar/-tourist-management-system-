@@ -61,11 +61,11 @@ const Step2 = ({ onNext, onBack }) => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "20px", backgroundColor: "lightblue", borderRadius: "20px", padding: "20px" }}>
-      <div style={{ backgroundColor: "lightgray", borderRadius: "20px", padding: "20px" }}>
+      <div style={{ backgroundColor: "lightgray", borderRadius: "20px", padding: "20px",width: "100%", maxWidth: "600px" ,marginLeft:"40px" }}>
         <div className="space-y-4 mt-4" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
           <Typography variant="h6">Primary Guests</Typography>
           {primaryGuests.map((guest, index) => (
-            <div key={index} className="space-y-2 border p-4 rounded-lg shadow-sm relative">
+            <div key={index} className="space-y-2 border p-4 rounded-lg shadow-sm relative" style={{ display: "flex",flexDirection:"column",  gap: "18px" }}>
               <TextField
                 fullWidth
                 label="Name"
@@ -99,7 +99,7 @@ const Step2 = ({ onNext, onBack }) => {
           </Button>
 
           <Typography variant="h6" className="mt-6">Managed Guest</Typography>
-          <div className="space-y-2 border p-4 rounded-lg shadow-sm">
+          <div className="space-y-2 border p-4 rounded-lg shadow-sm" style={{ display: "flex",flexDirection:"column",  gap: "15px" }}>
             <TextField
               fullWidth
               label="Name"
@@ -135,7 +135,7 @@ const Step2 = ({ onNext, onBack }) => {
           </div>
         </div>
       </div>
-      <div>
+      <div style={{display: "flex", justifyContent: "center", alignItems: "center", width: "100%", }}>
         <img src={tours[0].photo} alt="tour" />
       </div>
     </div>
