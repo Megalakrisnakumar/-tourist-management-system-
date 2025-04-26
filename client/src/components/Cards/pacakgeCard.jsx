@@ -73,15 +73,15 @@ const PackageCard = ({ packageData }) => {
             {packageData.offer && packageData.packageDiscountPrice ? (
               <Box display="flex" gap={1} alignItems="center">
                 <Typography variant="body2" color="text.secondary" sx={{ textDecoration: "line-through" }}>
-                  ${packageData.packagePrice}
+                  ₹{packageData.packagePrice}
                 </Typography>
                 <Typography variant="h6" color="success.main" sx={{ fontWeight: "bold" }}>
-                  ${packageData.packageDiscountPrice}
+                  ₹{packageData.packageDiscountPrice}
                 </Typography>
               </Box>
             ) : (
               <Typography variant="h6" color="success.main" sx={{ fontWeight: "bold" }}>
-                ${packageData.packagePrice}
+                 ₹{packageData.packagePrice}
               </Typography>
             )}
 
