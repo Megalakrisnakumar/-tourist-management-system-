@@ -6,7 +6,8 @@ import { jsPDF } from "jspdf";
 
 const MyBookingPage = () => {
   const [bookings, setBookings] = useState(null);
-  const userId = "67e8dfa3087200e929f2b291"; // Replace with dynamic user ID
+  const user=localStorage.getItem("user")
+  const userId = JSON.parse(user)._id
 
   useEffect(() => {
     axios
