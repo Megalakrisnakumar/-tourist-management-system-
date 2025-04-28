@@ -55,6 +55,11 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
+    status: {
+      type: String,
+      default: "pending",
+    },
+
   },
   { timestamps: true }
 );

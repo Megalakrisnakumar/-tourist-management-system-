@@ -3,36 +3,102 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/config';
+import {
+  Modal,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton
+} from '@mui/material';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import PaymentIcon from '@mui/icons-material/Payment';
+import CloseIcon from '@mui/icons-material/Close';
 
 const AccBookingPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  const [open, setOpen] = useState(true);
+  const handleClose = () => setOpen(false);
 
   const [numOfNights, setNumOfNights] = useState(1);
+  const [numOfRooms, setNumOfRooms] = useState(1);
   const [totalPrice, setTotalPrice] = useState(state.pricePerNight);
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
 
-  const { user, dispatch } = useContext(AuthContext);
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardType, setCardType] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+
+  const detectCardType = (number) => {
+    const cleaned = number.replace(/\s+/g, '');
+    if (/^4/.test(cleaned)) return 'Visa';
+    if (/^5[1-5]/.test(cleaned)) return 'MasterCard';
+    return '';
+  };
+
+  const calculateNightsAndPrice = (checkIn, checkOut, rooms) => {
+    const inDate = new Date(checkIn);
+    const outDate = new Date(checkOut);
+    const timeDiff = outDate - inDate;
+    const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    if (nights > 0) {
+      setNumOfNights(nights);
+      setTotalPrice(state.pricePerNight * nights * rooms);
+    } else {
+      setNumOfNights(0);
+      setTotalPrice(0);
+    }
+  };
 
   const handleCheckInChange = (e) => {
     const selectedDate = e.target.value;
     setCheckInDate(selectedDate);
-
-    // If checkout date is already selected and now invalid, reset it
-    if (checkOutDate && new Date(selectedDate) >= new Date(checkOutDate)) {
-      setCheckOutDate('');
+    if (checkOutDate) {
+      calculateNightsAndPrice(selectedDate, checkOutDate, numOfRooms);
     }
   };
 
   const handleCheckOutChange = (e) => {
-    setCheckOutDate(e.target.value);
+    const selectedDate = e.target.value;
+    setCheckOutDate(selectedDate);
+    if (checkInDate) {
+      calculateNightsAndPrice(checkInDate, selectedDate, numOfRooms);
+    }
   };
 
-  const handleNightsChange = (e) => {
-    const nights = e.target.value;
-    setNumOfNights(nights);
-    setTotalPrice(state.pricePerNight * nights);
+  const handleNumOfRoomsChange = (e) => {
+    const rooms = e.target.value;
+    setNumOfRooms(rooms);
+    if (checkInDate && checkOutDate) {
+      calculateNightsAndPrice(checkInDate, checkOutDate, rooms);
+    }
+  };
+
+  const handleCardNumberChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '').slice(0, 16);
+    let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+    setCardNumber(formatted);
+    setCardType(detectCardType(value));
+  };
+
+  const handleExpiryDateChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    }
+    setExpiryDate(value);
+  };
+
+  const handleCvvChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 3);
+    setCvv(value);
   };
 
   const handleSubmit = (e) => {
@@ -59,12 +125,28 @@ const AccBookingPage = () => {
       return;
     }
 
+    if (cardNumber.replace(/\s/g, '').length !== 16 || !cardType) {
+      alert("Please enter a valid card number.");
+      return;
+    }
+
+    if (cvv.length !== 3) {
+      alert("Please enter a valid 3-digit CVV.");
+      return;
+    }
+
+    if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+      alert("Please enter a valid expiry date in MM/YY format.");
+      return;
+    }
+
     const data = {
       userId: user._id,
       accommodationId: state.accommodationId,
-      checkInDate: checkInDate,
-      checkOutDate: checkOutDate,
-      totalPrice: totalPrice
+      checkInDate,
+      checkOutDate,
+      numOfRooms,
+      totalPrice,
     };
 
     axios.post(BASE_URL + "/accomondation/booking/create", data).then(res => {
@@ -77,119 +159,163 @@ const AccBookingPage = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "400px", padding: '20px' }}>
-      {/* Image Section */}
-      <div style={{ padding: '1px' }}>
-        <img
-          src={"http://localhost:8000/uploads/" + state.images[0]}
-          alt={state.name}
-          style={{ width: '70%', borderRadius: '10px', objectFit: 'cover', height: '400px' }}
-        />
-      </div>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={{
+        width: 600,
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        p: 4,
+        m: '100px auto',
+        position: 'relative',
+        boxShadow: 24,
+      }}>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{ position: 'absolute', right: 8, top: 8 }}
+        >
+          <CloseIcon />
+        </IconButton>
 
-      {/* Form Section */}
-      <div
-        style={{
-          width: '400px',
-          marginLeft: '20px',
-          padding: '20px',
-          border: '1px solid #ddd',
-          borderRadius: '10px',
-        }}
-      >
-        <h2>Booking Your Stay</h2>
-        <h3>{state.name}</h3>
-        <p>{state.location}</p>
+        <Typography variant="h5" mb={2}>Booking Your Stay</Typography>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Accommodation Name</label>
-            <input
-              type="text"
-              value={state.name}
-              readOnly
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          {/* Accommodation Info */}
+          <TextField
+            label="Accommodation Name"
+            value={state.name}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Location</label>
-            <input
-              type="text"
-              value={state.location}
-              readOnly
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          <TextField
+            label="Location"
+            value={state.location}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Price per Night</label>
-            <input
-              type="number"
-              value={state.pricePerNight}
-              readOnly
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          <TextField
+            label="Price per Night"
+            value={state.pricePerNight}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Check-in Date</label>
-            <input
-              type="date"
-              value={checkInDate}
-              onChange={handleCheckInChange}
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          {/* Stay Details */}
+          <TextField
+            label="Check-in Date"
+            type="date"
+            value={checkInDate}
+            onChange={handleCheckInChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Check-out Date</label>
-            <input
-              type="date"
-              value={checkOutDate}
-              onChange={handleCheckOutChange}
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          <TextField
+            label="Check-out Date"
+            type="date"
+            value={checkOutDate}
+            onChange={handleCheckOutChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Number of Nights</label>
-            <input
-              type="number"
-              value={numOfNights}
-              onChange={handleNightsChange}
-              min="1"
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          <TextField
+            label="Number of Nights"
+            value={numOfNights}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
 
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Total Price</label>
-            <input
-              type="number"
-              value={totalPrice}
-              readOnly
-              style={{ width: '100%', padding: '8px', borderRadius: '5px' }}
-            />
-          </div>
+          <TextField
+            label="Number of Rooms"
+            type="number"
+            value={numOfRooms}
+            onChange={handleNumOfRoomsChange}
+            min="1"
+            fullWidth
+            margin="normal"
+          />
 
-          <button
-            type="submit"
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              width: '100%',
+          <TextField
+            label="Total Price"
+            value={totalPrice}
+            fullWidth
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
+
+          {/* Payment Section */}
+          <Typography variant="h6" mt={3}>Payment Details</Typography>
+
+          <TextField
+            label="Card Number"
+            value={cardNumber}
+            onChange={handleCardNumberChange}
+            fullWidth
+            margin="normal"
+            placeholder="1234 5678 9012 3456"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CreditCardIcon />
+                </InputAdornment>
+              ),
             }}
+          />
+
+          {cardType && (
+            <Typography variant="body2" color="green" mb={1}>
+              Card Type: {cardType}
+            </Typography>
+          )}
+
+          <TextField
+            label="Expiry Date (MM/YY)"
+            value={expiryDate}
+            onChange={handleExpiryDateChange}
+            fullWidth
+            margin="normal"
+            placeholder="MM/YY"
+          />
+
+          <TextField
+            label="CVV"
+            value={cvv}
+            onChange={handleCvvChange}
+            fullWidth
+            margin="normal"
+            placeholder="123"
+            type="password"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PaymentIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
           >
             Confirm Booking
-          </button>
+          </Button>
         </form>
-      </div>
-    </div>
+      </Box>
+    </Modal>
   );
 };
 

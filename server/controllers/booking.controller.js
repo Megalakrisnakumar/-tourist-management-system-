@@ -330,3 +330,35 @@ export const cancelBooking = async (req, res) => {
     console.log(error);
   }
 };
+
+
+//cancel booking
+export const StatusupdateBooking = async (req, res) => {
+  try {
+  
+    console.log(req.body,req?.params?.id);
+    
+
+    const cancBooking = await Booking.findById(
+      req?.params?.id,
+    );
+
+    cancBooking.status = req.body.status;
+    await cancBooking.save();
+
+    if (cancBooking) {
+      return res.status(200).send({
+        success: true,
+        message: "Booking status updated!",
+      });
+    } else {
+      return res.status(500).send({
+        success: false,
+        message: "Something went wrong while status updated booking!",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
