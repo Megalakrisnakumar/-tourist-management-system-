@@ -26,7 +26,7 @@ const bookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Booked",
+      default: "pending",
     },
   },
   { timestamps: true }

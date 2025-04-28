@@ -98,3 +98,18 @@ export const deleteBooking = async (req, res) => {
 
 }
 
+export const updateStausBooking = async (req, res) => {
+
+    const id = req.params.id
+    try {
+        await Booking.findByIdAndUpdate(id, { status: req.body.status });
+        res.status(200).json({ success: true, message: 'Update successfully' })
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: 'internal server error' })
+    }
+
+
+}
+

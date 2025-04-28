@@ -7,6 +7,7 @@ import {
   getAllUserBookings,
   getCurrentBookings,
   getUserCurrentBookings,
+  StatusupdateBooking,
 } from "../controllers/booking.controller.js";
 import { isAdmin, requireSignIn } from "../Auth/authMiddleware.js";
 
@@ -41,4 +42,9 @@ router.delete(
 //cancle booking by id
 router.post("/cancel-booking/:id/:userId", requireSignIn, cancelBooking);
 
+// status update booking by id
+router.put('/update/status/:id',StatusupdateBooking)
+
+// /api/package/booking/update/status/${bookingId}
+// /api/package/booking
 export default router;

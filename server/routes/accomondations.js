@@ -1,5 +1,5 @@
 import express from "express";
-import  {CancebookingSpecificUser, CreateAccommodation, CreateAccomondationBooking, DeleteAccommodation, GetAccommodationById, GetAllAccommodations, GetAllAccommodationsbookings, GetbookingSpecificUser } from "../controllers/AccomondationController.js";
+import  {CancebookingSpecificUser, CreateAccommodation, CreateAccomondationBooking, DeleteAccommodation, GetAccommodationById, GetAllAccommodations, GetAllAccommodationsbookings, GetbookingSpecificUser, statusUpdatebookingSpecificUser } from "../controllers/AccomondationController.js";
 import multer from 'multer';
 import upload from "../Middleware/fileupload.js";
 
@@ -21,6 +21,9 @@ router.post('/booking/create',CreateAccomondationBooking);
 router.get('/booking/getAll',GetAllAccommodationsbookings)
 router.get('/booking/:id',GetbookingSpecificUser)
 router.put('/booking/:id',CancebookingSpecificUser)
+router.put('/booking/status/:id',statusUpdatebookingSpecificUser)
+
+
 
 
 export default router

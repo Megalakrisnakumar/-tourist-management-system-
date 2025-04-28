@@ -31,11 +31,16 @@ const bookingSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  numOfRooms: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
   status: {
     type: String,
     required: true,
-    enum: ['confirmed', 'cancelled'],
-    default: 'confirmed',
+    enum: ['confirmed', 'cancelled',"pending"],
+    default: 'pending',
   },
 }, { timestamps: true });
 

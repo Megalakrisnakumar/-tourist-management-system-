@@ -113,7 +113,7 @@ export const GetAccommodationById = async (req, res) => {
 export const CreateAccomondationBooking = async (req, res) => {
   try {
     // Extract booking details from the request body
-    const { userId, accommodationId, checkInDate, checkOutDate, totalPrice } = req.body;
+    const { userId, accommodationId, checkInDate, checkOutDate, totalPrice,numOfRooms } = req.body;
 
 
     // Auto-generate bookingId (if required, handled in schema middleware)
@@ -123,6 +123,7 @@ export const CreateAccomondationBooking = async (req, res) => {
       checkInDate,
       checkOutDate,
       totalPrice,
+      numOfRooms
     });
 
     // Save the booking to the database
@@ -215,6 +216,38 @@ export const CancebookingSpecificUser = async (req, res) => {
     });
   }
 };
+
+
+export const statusUpdatebookingSpecificUser = async (req, res) => {
+
+  const id = req.params.id
+  const bid = req.body.id
+  const status = req.body.status
+
+  try {
+    const accommodations = await AccBooking.findOne({ userId: id, _id: bid });
+
+    accommodations.status =status ;
+    await accommodations.save()
+
+    res.status(200).json({
+      success: true,
+      message: "Accommodations canceled successfully",
+      data: accommodations,
+    });
+  } catch (err) {
+
+    console.log(err);
+
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve accommodations bookings",
+      error: err.message,
+    });
+  }
+};
+
 
 
 
